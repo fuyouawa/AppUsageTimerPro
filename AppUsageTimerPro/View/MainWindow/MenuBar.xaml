@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="AppUsageTimerPro.View.MainWindow.MenuBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AppUsageTimerPro.View.MainWindow"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="700">
+    <Menu>
+        <MenuItem Header="主题">
+            <MenuItem Header="浅色" />
+            <MenuItem Header="深色" />
+        </MenuItem>
+        <MenuItem Header="语言">
+            <MenuItem Header="中文" />
+            <MenuItem Header="English" />
+        </MenuItem>
+        <MenuItem Header="帮助">
+            <MenuItem Header="使用方法" />
+            <MenuItem Header="检查更新" />
+            <MenuItem Header="关于" />
+        </MenuItem>
+    </Menu>
+</UserControl>
