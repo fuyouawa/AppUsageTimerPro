@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.Controls;
+﻿using AppUsageTimerPro.Utils;
+using MahApps.Metro.Controls;
 
 namespace AppUsageTimerPro
 {
@@ -9,6 +10,7 @@ namespace AppUsageTimerPro
     {
         public MainWindow()
         {
+            GlobalManager.Instance.MainWindow = this;
             InitializeComponent();
         }
     }

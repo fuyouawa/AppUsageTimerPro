@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="AppUsageTimerPro.View.MainWindow.TimerPanel.TimerItemOperations"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AppUsageTimerPro.View.MainWindow.TimerPanel"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d">
+    <StackPanel Orientation="Horizontal" Margin="5, 0, 0, 0">
+        <Button Style="{DynamicResource MahApps.Styles.Button.Circle}"
+                Width="23"
+                Height="23"
+                Margin="0, 0, 3, 0"
+                BorderThickness="0"
+                ToolTip="暂停计时器">
+            <iconPacks:PackIconZondicons Kind="PauseOutline" Width="21" Height="21" />
+        </Button>
+        <Button Style="{DynamicResource MahApps.Styles.Button.Circle}"
+                Width="23"
+                Height="23"
+                Margin="0, 0, 3, 0"
+                BorderThickness="0"
+                ToolTip="终止计时器">
+            <iconPacks:PackIconPicolIcons Kind="BadgeStop" Width="21" Height="21" />
+        </Button>
+        <Button Style="{DynamicResource MahApps.Styles.Button.Circle}"
+                Width="21"
+                Height="21"
+                Margin="0, 0, 3, 0"
+                Padding="0"
+                BorderThickness="0"
+                ToolTip="查看详细记录">
+            <iconPacks:PackIconOcticons Kind="Calendar" Width="21" Height="21" />
+        </Button>
+        <Button Style="{DynamicResource MahApps.Styles.Button.Circle}"
+                Width="21"
+                Height="21"
+                Margin="0, 0, 3, 0"
+                Padding="0"
+                BorderThickness="0"
+                ToolTip="编辑信息">
+            <iconPacks:PackIconMaterial Kind="NoteEditOutline" Width="21" Height="21" />
+        </Button>
+    </StackPanel>
+</UserControl>
