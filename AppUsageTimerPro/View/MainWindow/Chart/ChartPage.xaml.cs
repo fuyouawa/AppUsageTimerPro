@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AppUsageTimerPro.View.MainWindow
+namespace AppUsageTimerPro.View.MainWindow.Chart
 {
     /// <summary>
     /// Interaction logic for ChartPage.xaml

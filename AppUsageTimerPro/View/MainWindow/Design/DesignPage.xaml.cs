@@ -1,5 +1,4 @@
-﻿using MahApps.Metro.Controls.Dialogs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AppUsageTimerPro.View.MainWindow.TimerPanel
+namespace AppUsageTimerPro.View.MainWindow.Design
 {
     /// <summary>
-    /// AddTimerDialog.xaml 的交互逻辑
+    /// DesignPage.xaml 的交互逻辑
     /// </summary>
-    public partial class AddTimerDialog : CustomDialog
+    public partial class DesignPage : Page
     {
-        public AddTimerDialog()
+        public DesignPage()
         {
             InitializeComponent();
         }

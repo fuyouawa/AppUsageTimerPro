@@ -72,6 +72,11 @@
                         <iconPacks:PackIconMaterial Kind="Cloud" Width="22" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </mah:HamburgerMenuIconItem.Icon>
                 </mah:HamburgerMenuIconItem>
+                <mah:HamburgerMenuIconItem Label="个性化面板">
+                    <mah:HamburgerMenuIconItem.Icon>
+                        <iconPacks:PackIconRemixIcon Kind="PaletteLine" Width="22" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </mah:HamburgerMenuIconItem.Icon>
+                </mah:HamburgerMenuIconItem>
             </mah:HamburgerMenuItemCollection>
         </mah:HamburgerMenu.ItemsSource>
         <!-- 底部选项 -->

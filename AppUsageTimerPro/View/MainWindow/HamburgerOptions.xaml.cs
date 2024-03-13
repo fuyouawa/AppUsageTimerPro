@@ -10,10 +10,11 @@ namespace AppUsageTimerPro.View.MainWindow
     public partial class HamburgerOptions : UserControl
     {
         protected Frame hamburgerContentFrame = new() { NavigationUIVisibility = NavigationUIVisibility.Hidden };
-        protected TimerPanel.TimerPage timerPage = new();
-        protected ChartPage chartPage = new();
-        protected CloudPage cloudPage = new();
-        protected SettingsPage settingsPage = new();
+        protected Timer.TimerPage timerPage = new();
+        protected Chart.ChartPage chartPage = new();
+        protected Cloud.CloudPage cloudPage = new();
+        protected Design.DesignPage designPage = new();
+        protected Settings.SettingsPage settingsPage = new();
 
         public HamburgerOptions()
         {
@@ -35,6 +36,9 @@ namespace AppUsageTimerPro.View.MainWindow
                     break;
                 case 2:
                     hamburgerContentFrame.Navigate(cloudPage);
+                    break;
+                case 3:
+                    hamburgerContentFrame.Navigate(designPage);
                     break;
             }
         }

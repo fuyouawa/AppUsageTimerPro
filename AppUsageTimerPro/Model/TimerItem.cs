@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AppUsageTimerPro.Tools;
+using System;
 
 namespace AppUsageTimerPro.Model
 {
@@ -20,13 +21,23 @@ namespace AppUsageTimerPro.Model
             set { _name = value; }
         }
 
-        private DateTime _usageTime;
+        private TimeSpan _totalUsageTime = new();
 
-        public string UsageTimeStr => _usageTime.ToShortTimeString();
+        public string TotalUsageTimeStr => _totalUsageTime.ToTimeString();
 
-        private string[] _tags;
+        private TimeSpan _todayUsageTime = new();
 
-        public string TagStr => string.Join(", ", _tags);
+        private TimeSpan _continueUsageTime = new();
+
+        public string TodayTimeStr => _todayUsageTime.ToTimeString();
+
+        private string _tag;
+
+        public string Tag
+        {
+            get => _tag;
+            set => _tag = value;
+        }
 
         private TimerStatus _status;
 
@@ -46,10 +57,10 @@ namespace AppUsageTimerPro.Model
         }
 
 
-        public TimerItem(string name, string[] tags, string appName)
+        public TimerItem(string name, string tag, string appName)
         {
             _name = name;
-            _tags = tags;
+            _tag = tag;
             _status = TimerStatus.Standing;
             _appName = appName;
         }

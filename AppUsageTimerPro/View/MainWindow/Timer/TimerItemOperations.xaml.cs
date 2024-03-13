@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AppUsageTimerPro.View.MainWindow.TimerPanel
+namespace AppUsageTimerPro.View.MainWindow.Timer
 {
     /// <summary>
     /// Interaction logic for TimerItemOperations.xaml

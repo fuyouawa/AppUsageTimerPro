@@ -5,7 +5,7 @@ using MahApps.Metro.Controls.Dialogs;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace AppUsageTimerPro.View.MainWindow.TimerPanel
+namespace AppUsageTimerPro.View.MainWindow.Timer
 {
     /// <summary>
     /// Interaction logic for TimerPage.xaml

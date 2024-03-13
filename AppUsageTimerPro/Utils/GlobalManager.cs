@@ -1,5 +1,7 @@
 ﻿using AppUsageTimerPro.Tools;
+using AppUsageTimerPro.View.Custom.Controls;
 using MahApps.Metro.Controls;
+using MahApps.Metro.IconPacks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +9,7 @@ using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace AppUsageTimerPro.Utils
 {
@@ -23,5 +26,5 @@ namespace AppUsageTimerPro.Utils
 			}
 			set { _mainWindow = value; }
 		}
-	}
+    }
 }

@@ -1,0 +1,57 @@
+﻿<mah:CustomDialog x:Class="AppUsageTimerPro.View.MainWindow.Timer.AddTimerDialog"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:AppUsageTimerPro.View.MainWindow.Timer"
+                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                  mc:Ignorable="d"
+                  Height="210">
+    <mah:CustomDialog.Resources>
+        <local:Converter x:Key="WidthConverter" />
+    </mah:CustomDialog.Resources>
+    <StackPanel>
+        <Label Content="添加计时器" FontSize="18"/>
+        <Label Content="输入基本信息" FontSize="14"/>
+        <TextBox x:Name="tbTimerName"
+                 mah:TextBoxHelper.ClearTextButton="True"
+                 mah:TextBoxHelper.Watermark="计时器名称......(1-10字)" />
+        <TextBox x:Name="tbTagTag"
+                 mah:TextBoxHelper.ClearTextButton="True"
+                 mah:TextBoxHelper.Watermark="标签......(1-10字)" Margin="0, 5, 0, 0"/>
+        <StackPanel Orientation="Horizontal"
+                    Margin="0, 5, 0, 0"
+                    Width="{Binding ElementName=tbTimerName, Path=ActualWidth}">
+            <TextBox x:Name="tbAppName"
+                     mah:TextBoxHelper.ClearTextButton="True"
+                     mah:TextBoxHelper.Watermark="要监听的应用程序......"
+                     Width="{Binding ElementName=tbTimerName, Path=ActualWidth, Converter={StaticResource WidthConverter}, ConverterParameter={x:Reference tbTimerName}}"/>
+            <Button Click="BtnOpenFile_Click"
+                    Width="{Binding ActualHeight}"
+                    Height="{Binding ActualHeight}"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource MahApps.Styles.Button.Square}"
+                    BorderBrush="LightGray"
+                    Margin="3, 0, 0, 0">
+                <iconPacks:PackIconMaterial Kind="DotsHorizontal" Opacity="0.5" />
+            </Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"
+                    Margin="0, 5, 0, 0"
+                    HorizontalAlignment="Right">
+            <TextBlock x:Name="tbError" FontSize="14" Foreground="Red" VerticalAlignment="Center" Margin="0, 0, 10, 0"/>
+            <Button Content="确定"
+                    Click="BtnOk_Click"
+                    FontSize="14"
+                    Style="{StaticResource MahApps.Styles.Button.Square}"
+                    Width="50"/>
+            <Button x:Name="btnCancel"
+                    Content="取消"
+                    FontSize="14"
+                    Style="{StaticResource MahApps.Styles.Button.Square}"
+                    Width="50"
+                    Margin="5, 0, 0, 0"/>
+        </StackPanel>
+    </StackPanel>
+</mah:CustomDialog>
