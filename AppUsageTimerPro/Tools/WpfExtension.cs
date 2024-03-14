@@ -1,5 +1,7 @@
-﻿using AppUsageTimerPro.View.Custom.Controls;
+﻿using AppUsageTimerPro.Utils;
+using AppUsageTimerPro.View.Custom.Controls;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +24,14 @@ namespace AppUsageTimerPro.Tools
 
         public static void ShowPopupMessageBox(this MetroWindow window, string message, MessageType type = MessageType.Info, long lifeTime = 3000, bool hasLifeTime = true)
         {
-            window.ShowFlyout(new PopupMessageBox()
+            PopupMessageBox box = new()
             {
                 IsAutoCloseEnabled = hasLifeTime,
                 AutoCloseInterval = lifeTime,
-                Message = message,
                 MsgType = type
-            });
+            };
+            box.tbMessage.Text = message;
+            window.ShowFlyout(box);
         }
     }
 }

@@ -18,7 +18,7 @@
     <mah:Flyout.Header>
         <StackPanel x:Name="panel" Orientation="Horizontal">
             <ContentControl Content="{Binding MsgType, Converter={StaticResource TypeToIconConverter}}"/>
-            <TextBlock x:Name="tbMessage" Text="{Binding Message}" Width="auto" VerticalAlignment="Center" FontSize="24" Margin="10, 0, 0, 0"/>
+            <TextBlock x:Name="tbMessage" Width="auto" VerticalAlignment="Center" FontSize="24" Margin="10, 0, 0, 0"/>
         </StackPanel>
     </mah:Flyout.Header>
 </mah:Flyout>

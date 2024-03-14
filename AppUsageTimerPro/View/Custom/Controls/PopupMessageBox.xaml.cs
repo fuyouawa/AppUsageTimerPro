@@ -83,15 +83,6 @@ namespace AppUsageTimerPro.View.Custom.Controls
             set { _msgType = value; OnPropertyChanged(); }
         }
 
-
-        private string _message = "";
-
-        public string Message
-        {
-            get { return _message; }
-            set { _message = value; OnPropertyChanged(); }
-        }
-
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (e.WidthChanged) {
@@ -103,15 +94,16 @@ namespace AppUsageTimerPro.View.Custom.Controls
         {
             if (IsAutoCloseEnabled)
             {
-                var originMsg = Message;
+                var originMsg = tbMessage.Text;
                 for (int i = 0; i < AutoCloseInterval / 100; i++)
                 {
                     long milliseconds = AutoCloseInterval - i * 100;
                     double seconds = milliseconds / 1000.0;
                     string formatted = string.Format("{0:F1}", seconds);
-                    Message = $"{originMsg} ({formatted}s)";
+                    tbMessage.Text = $"{originMsg} ({formatted}s)";
                     await Task.Delay(100);
                 }
+                tbMessage.Text = originMsg;
             }
         }
     }

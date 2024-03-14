@@ -64,12 +64,15 @@
             </StackPanel>
         </Grid>
 
-        <DataGrid ItemsSource="{Binding TimerTableSource}"
+        <DataGrid ItemsSource="{Binding Collection}"
                   AutoGenerateColumns="False"
                   Grid.Row="1"
                   Style="{StaticResource MahApps.Styles.DataGrid.Azure}"
                   GridLinesVisibility="All"
-                  BorderThickness="1">
+                  BorderThickness="1"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedItem}"
+                  SelectedIndex="{Binding SelectedIndex}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="计时器名称" Binding="{Binding Path=Name}" Width="25*" IsReadOnly="True" CanUserSort="False"/>
                 <DataGridTextColumn Header="总使用时间" Binding="{Binding Path=TotalUsageTimeStr}" Width="20*" IsReadOnly="True" />

@@ -30,7 +30,7 @@
                 Padding="0"
                 BorderThickness="0"
                 ToolTip="查看详细记录">
-            <iconPacks:PackIconOcticons Kind="Calendar" Width="21" Height="21" />
+            <iconPacks:PackIconMaterial Kind="CalendarSearch" Width="21" Height="21" />
         </Button>
         <Button Style="{DynamicResource MahApps.Styles.Button.Circle}"
                 Width="21"

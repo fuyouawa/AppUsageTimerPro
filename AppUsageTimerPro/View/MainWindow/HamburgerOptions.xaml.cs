@@ -11,6 +11,7 @@ namespace AppUsageTimerPro.View.MainWindow
     {
         protected Frame hamburgerContentFrame = new() { NavigationUIVisibility = NavigationUIVisibility.Hidden };
         protected Timer.TimerPage timerPage = new();
+        protected Scheduler.SchedulerPage schedulerPage = new();
         protected Chart.ChartPage chartPage = new();
         protected Cloud.CloudPage cloudPage = new();
         protected Design.DesignPage designPage = new();
@@ -32,12 +33,15 @@ namespace AppUsageTimerPro.View.MainWindow
                     hamburgerContentFrame.Navigate(timerPage);
                     break;
                 case 1:
-                    hamburgerContentFrame.Navigate(chartPage);
+                    hamburgerContentFrame.Navigate(schedulerPage);
                     break;
                 case 2:
-                    hamburgerContentFrame.Navigate(cloudPage);
+                    hamburgerContentFrame.Navigate(chartPage);
                     break;
                 case 3:
+                    hamburgerContentFrame.Navigate(cloudPage);
+                    break;
+                case 4:
                     hamburgerContentFrame.Navigate(designPage);
                     break;
             }

@@ -43,7 +43,6 @@
                        OptionsItemTemplate="{StaticResource MyHamburgerItemStyle}"
                        CanResizeOpenPane="True"
                        PanePlacement="Left"
-                       OpenPaneLength="200"
                        SelectedIndex="0"
                        ItemClick="HamburgerMenuControl_ItemClick"
                        OptionsItemClick="HamburgerMenuControl_OptionsItemClick"
@@ -60,6 +59,11 @@
                 <mah:HamburgerMenuIconItem Label="计时器">
                     <mah:HamburgerMenuIconItem.Icon>
                         <iconPacks:PackIconIonicons Kind="AlarmMD" Width="22" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </mah:HamburgerMenuIconItem.Icon>
+                </mah:HamburgerMenuIconItem>
+                <mah:HamburgerMenuIconItem Label="日程计划">
+                    <mah:HamburgerMenuIconItem.Icon>
+                        <iconPacks:PackIconOcticons Kind="Calendar" Width="22" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </mah:HamburgerMenuIconItem.Icon>
                 </mah:HamburgerMenuIconItem>
                 <mah:HamburgerMenuIconItem Label="可视化分析">
