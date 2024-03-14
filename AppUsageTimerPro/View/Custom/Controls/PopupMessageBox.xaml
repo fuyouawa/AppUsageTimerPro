@@ -10,7 +10,6 @@
             IsOpen="True"
             Position="Top"
             Height="60"
-            SizeChanged="OnSizeChanged"
             Loaded="OnLoaded">
     <mah:Flyout.Resources>
         <local:TypeToIconConverter x:Key="TypeToIconConverter"/>

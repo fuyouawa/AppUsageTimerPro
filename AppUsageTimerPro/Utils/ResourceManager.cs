@@ -12,7 +12,8 @@ namespace AppUsageTimerPro.Utils
         public static MetroDialogSettings LocadedDialogSettings { get; private set; } = new()
         {
             AffirmativeButtonText = "确定",
-            NegativeButtonText = "取消"
+            NegativeButtonText = "取消",
+            DialogButtonFontSize = 15
         };
     }
 }

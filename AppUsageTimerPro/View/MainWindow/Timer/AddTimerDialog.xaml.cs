@@ -115,7 +115,7 @@ namespace AppUsageTimerPro.View.MainWindow.Timer
             SuccessAddTimerEvent?.Invoke(this, new(new(trimedName, trimedTag, tbAppName.Text)));
             return;
         error:
-            SystemSounds.Hand.Play();
+            SoundsManager.PlayError();
             return;
         }
     }

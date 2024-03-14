@@ -63,8 +63,8 @@ namespace AppUsageTimerPro.ViewModel
         {
             Collection.Add(e.Item);
             await GlobalManager.Instance.MainWindow.HideMetroDialogAsync(_addTimerDialog);
-            GlobalManager.Instance.MainWindow.ShowPopupMessageBox("计时器添加成功!");
-            SystemSounds.Beep.Play();
+            GlobalManager.Instance.MainWindow.ShowPopupMessage("计时器添加成功!");
+            SoundsManager.PlayTip();
         }
 
         private async void RemoveTimer()
@@ -86,28 +86,23 @@ namespace AppUsageTimerPro.ViewModel
                     return;
                 if (verifName != selectedTimer.Name)
                 {
-                    await GlobalManager.Instance.MainWindow.ShowMessageAsync(
-                        "错误",
-                        "验证失败, 计时器名称不一致!",
-                        MessageDialogStyle.Affirmative,
-                        ResourceManager.LocadedDialogSettings);
+                    GlobalManager.Instance.MainWindow.ShowPopupMessage("验证失败, 计时器名称不一致!", 4000, MessageType.Error);
+                    SoundsManager.PlayError();
                     return;
                 }
                 bool suc = Collection.Remove(selectedTimer);
                 if (suc)
                 {
-                    await GlobalManager.Instance.MainWindow.ShowMessageAsync(
-                        "提示",
-                        "删除成功!",
-                        MessageDialogStyle.Affirmative,
-                        ResourceManager.LocadedDialogSettings);
+                    GlobalManager.Instance.MainWindow.ShowPopupMessage("删除成功!", 2000);
+                    SoundsManager.PlayTip();
                     return;
                 }
                 else
                 {
+                    SoundsManager.PlayError();
                     await GlobalManager.Instance.MainWindow.ShowMessageAsync(
                         "错误",
-                        "出现预料之外的错误?\n删除已经被删除的计时器!",
+                        "出现预料之外的错误?\n删除已经被删除的计时器!\n可能是由于程序bug, 请联系开发者",
                         MessageDialogStyle.Affirmative,
                         ResourceManager.LocadedDialogSettings);
                     return;

@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AppUsageTimerPro.View.MainWindow.Design
+namespace AppUsageTimerPro.View.MainWindow.Health
 {
     /// <summary>
-    /// DesignPage.xaml 的交互逻辑
+    /// HealthPage.xaml 的交互逻辑
     /// </summary>
-    public partial class DesignPage : Page
+    public partial class HealthPage : Page
     {
-        public DesignPage()
+        public HealthPage()
         {
             InitializeComponent();
         }

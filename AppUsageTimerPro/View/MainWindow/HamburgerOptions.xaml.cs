@@ -14,7 +14,7 @@ namespace AppUsageTimerPro.View.MainWindow
         protected Scheduler.SchedulerPage schedulerPage = new();
         protected Chart.ChartPage chartPage = new();
         protected Cloud.CloudPage cloudPage = new();
-        protected Design.DesignPage designPage = new();
+        protected Health.HealthPage healthPage = new();
         protected Settings.SettingsPage settingsPage = new();
 
         public HamburgerOptions()
@@ -42,7 +42,7 @@ namespace AppUsageTimerPro.View.MainWindow
                     hamburgerContentFrame.Navigate(cloudPage);
                     break;
                 case 4:
-                    hamburgerContentFrame.Navigate(designPage);
+                    hamburgerContentFrame.Navigate(healthPage);
                     break;
             }
         }

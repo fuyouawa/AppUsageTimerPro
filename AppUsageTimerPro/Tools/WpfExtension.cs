@@ -22,7 +22,7 @@ namespace AppUsageTimerPro.Tools
             window.Flyouts.Items.Remove(flyout);
         }
 
-        public static void ShowPopupMessageBox(this MetroWindow window, string message, MessageType type = MessageType.Info, long lifeTime = 3000, bool hasLifeTime = true)
+        public static void ShowPopupMessage(this MetroWindow window, string message, long lifeTime = 3000, MessageType type = MessageType.Info, bool hasLifeTime = true)
         {
             PopupMessageBox box = new()
             {

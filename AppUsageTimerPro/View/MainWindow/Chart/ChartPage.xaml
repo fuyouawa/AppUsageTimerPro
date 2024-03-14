@@ -8,9 +8,9 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ChartPage">
 
-    <Grid>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40" Foreground="Gray">
-            暂未推出, 敬请期待
-        </TextBlock>
-    </Grid>
+    <StackPanel>
+        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="30" Foreground="Gray" Text="预告" TextWrapping="Wrap"/>
+        <TextBlock VerticalAlignment="Top" FontSize="20" Foreground="Gray" Text="用图表的方式分析计时器的使用时间" TextWrapping="Wrap"/>
+        <TextBlock VerticalAlignment="Top" FontSize="20" Foreground="Gray" Text="例如用一个时间线来展示一天在每个时间段使用的是哪个软件, 用一个折线图表来展示一个软件一个月的使用情况" TextWrapping="Wrap"/>
+    </StackPanel>
 </Page>

@@ -8,9 +8,8 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CloudPage">
 
-    <Grid>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40" Foreground="Gray">
-            暂未推出, 敬请期待
-        </TextBlock>
-    </Grid>
+    <StackPanel>
+        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="30" Foreground="Gray" Text="预告" TextWrapping="Wrap"/>
+        <TextBlock VerticalAlignment="Top" FontSize="20" Foreground="Gray" Text="存档可以存在服务器上, 不需要过多解释" TextWrapping="Wrap"/>
+    </StackPanel>
 </Page>

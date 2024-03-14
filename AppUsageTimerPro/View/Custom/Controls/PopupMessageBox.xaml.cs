@@ -83,28 +83,33 @@ namespace AppUsageTimerPro.View.Custom.Controls
             set { _msgType = value; OnPropertyChanged(); }
         }
 
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (e.WidthChanged) {
-                panel.Margin = new Thickness((e.NewSize.Width - tbMessage.ActualWidth - IconWidth - 10) / 2 - 60, 0, 0, 0);
-            }
-        }
-
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             if (IsAutoCloseEnabled)
             {
                 var originMsg = tbMessage.Text;
+
+                var formatter = delegate (long milliseconds)
+                {
+                    double seconds = milliseconds / 1000.0;
+                    return string.Format("{0:F1}", seconds);
+                };
+
+                tbMessage.Text = formatter(AutoCloseInterval);
+                AdjustPosition(ActualWidth);
                 for (int i = 0; i < AutoCloseInterval / 100; i++)
                 {
-                    long milliseconds = AutoCloseInterval - i * 100;
-                    double seconds = milliseconds / 1000.0;
-                    string formatted = string.Format("{0:F1}", seconds);
-                    tbMessage.Text = $"{originMsg} ({formatted}s)";
                     await Task.Delay(100);
+                    tbMessage.Text = $"{originMsg} ({formatter(AutoCloseInterval - i * 100)}s)";
                 }
                 tbMessage.Text = originMsg;
             }
+        }
+
+
+        private void AdjustPosition(double newWidth)
+        {
+            panel.Margin = new Thickness((newWidth - tbMessage.ActualWidth - IconWidth - 10) / 2 - 60, 0, 0, 0);
         }
     }
 }
