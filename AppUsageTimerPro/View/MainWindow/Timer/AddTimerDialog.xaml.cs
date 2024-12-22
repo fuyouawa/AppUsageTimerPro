@@ -3,22 +3,10 @@ using AppUsageTimerPro.Utils;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AppUsageTimerPro.View.MainWindow.Timer
 {
@@ -91,9 +79,9 @@ namespace AppUsageTimerPro.View.MainWindow.Timer
                 tbError.Text = "计时器名称不能为空!";
                 goto error;
             }
-            else if (trimedName.Length > 10)
+            else if (trimedName.Length > 16)
             {
-                tbError.Text = "计时器名称不能超过10个字!";
+                tbError.Text = "计时器名称不能超过16个字!";
                 goto error;
             }
             if (trimedTag.Length == 0)
@@ -101,9 +89,9 @@ namespace AppUsageTimerPro.View.MainWindow.Timer
                 tbError.Text = "标签不能为空!";
                 goto error;
             }
-            else if (trimedTag.Length > 10)
+            else if (trimedTag.Length > 16)
             {
-                tbError.Text = "标签不能不能超过10个字!";
+                tbError.Text = "标签不能不能超过16个字!";
                 goto error;
             }
             if(!File.Exists(tbAppName.Text))
@@ -112,7 +100,7 @@ namespace AppUsageTimerPro.View.MainWindow.Timer
                 goto error;
             }
             tbError.Text = "";
-            SuccessAddTimerEvent?.Invoke(this, new(new(trimedName, trimedTag, tbAppName.Text)));
+            SuccessAddTimerEvent?.Invoke(this, new SuccessAddTimerEventArgs(new TimerItem(trimedName, trimedTag, tbAppName.Text)));
             return;
         error:
             SoundsManager.PlayError();
