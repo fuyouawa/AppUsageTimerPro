@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Security.Principal;
 
-namespace AppUsageTimerPro.Tools;
+namespace AppUsageTimerPro;
 
 public class WindowsHelper
 {

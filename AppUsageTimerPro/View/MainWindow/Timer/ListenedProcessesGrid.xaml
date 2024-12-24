@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="AppUsageTimerPro.ListenedProcessesGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AppUsageTimerPro"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d"
+             d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:ListenedProcessesViewModel></local:ListenedProcessesViewModel>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox x:Name="TxtListenAppName"
+                     mah:TextBoxHelper.ClearTextButton="True"
+                     mah:TextBoxHelper.Watermark="要监听的应用程序......"
+                     Grid.Column="0" />
+            <Button HorizontalAlignment="Right"
+                    Style="{StaticResource MahApps.Styles.Button.Square}"
+                    BorderBrush="LightGray"
+                    ToolTip="打开资源管理器选择应用"
+                    Grid.Column="1"
+                    Click="OnClickOpenAppName">
+                <iconPacks:PackIconMaterial Kind="DotsHorizontal" Opacity="0.5" />
+            </Button>
+            <Button HorizontalAlignment="Right"
+                    Style="{DynamicResource MahApps.Styles.Button.Square}"
+                    BorderBrush="LightGray"
+                    ToolTip="添加监听应用"
+                    Grid.Column="2"
+                    Click="OnClickAddListenApp">
+                <iconPacks:PackIconCodicons Kind="Add" Opacity="0.5" />
+            </Button>
+        </Grid>
+        <DataGrid ItemsSource="{Binding Collection}"
+                  AutoGenerateColumns="False"
+                  GridLinesVisibility="All"
+                  BorderThickness="1"
+                  Style="{StaticResource MahApps.Styles.DataGrid.Azure}"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedItem}"
+                  SelectedIndex="{Binding SelectedIndex}"
+                  Grid.Row="1"
+                  RowHeight="25">
+            <DataGrid.Columns>
+                <local:DataGridIndexRowColumn/>
+                <DataGridTextColumn Header="监听应用列表" Binding="{Binding Path=Name}" IsReadOnly="True" Width="*" />
+                <DataGridTemplateColumn Width="25" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{DynamicResource MahApps.Styles.Button.Square}"
+                                    BorderThickness="0"
+                                    ToolTip="删除"
+                                    VerticalAlignment="Center"
+                                    Click="OnClickRemoveListenApp">
+                                <iconPacks:PackIconCodicons Kind="Remove" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

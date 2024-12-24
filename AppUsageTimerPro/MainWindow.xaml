@@ -6,7 +6,6 @@
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:local="clr-namespace:AppUsageTimerPro"
-                 xmlns:mainwindow="clr-namespace:AppUsageTimerPro.View.MainWindow"
                  mc:Ignorable="d"
                  WindowStartupLocation="CenterScreen"
                  Title="AUT Pro" Height="500" Width="800">
@@ -15,7 +14,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <mainwindow:MenuBar/>
-        <mainwindow:HamburgerOptions Grid.Row="1"/>
+        <local:MenuBar x:Name="MenuBar"/>
+        <local:HamburgerOptions x:Name="HamburgerOptions" Grid.Row="1"/>
     </Grid>
 </mah:MetroWindow>

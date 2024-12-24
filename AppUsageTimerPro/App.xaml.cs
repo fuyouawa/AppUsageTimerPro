@@ -1,7 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
-using AppUsageTimerPro.Tools;
+using AppUsageTimerPro;
 using Serilog;
 
 namespace AppUsageTimerPro
@@ -15,7 +16,10 @@ namespace AppUsageTimerPro
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug() // 设置最低日志级别
-                .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day) // 输出到文件，按天滚动
+                .WriteTo.File(
+                    Path.Combine(DataManager.Instance.LogSaveDir, "log.txt"),
+                    rollingInterval: RollingInterval.Day) // 输出到文件，按天滚动
+                .WriteTo.Sink(new LogSink())
                 .CreateLogger();
 
             ForceScanner.Instance.Initialize();

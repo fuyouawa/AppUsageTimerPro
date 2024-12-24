@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="AppUsageTimerPro.View.MainWindow.HamburgerOptions"
+﻿<UserControl x:Class="AppUsageTimerPro.HamburgerOptions"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:AppUsageTimerPro.View.MainWindow"
+             xmlns:local="clr-namespace:AppUsageTimerPro"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d"
@@ -44,8 +44,8 @@
                        CanResizeOpenPane="True"
                        PanePlacement="Left"
                        SelectedIndex="0"
-                       ItemClick="HamburgerMenuControl_ItemClick"
-                       OptionsItemClick="HamburgerMenuControl_OptionsItemClick"
+                       ItemClick="OnClickItem"
+                       OptionsItemClick="OnClickOptionsItem"
                        x:Name="HamburgerMenuControl">
         <!-- 标题 -->
         <mah:HamburgerMenu.HamburgerMenuHeaderTemplate>

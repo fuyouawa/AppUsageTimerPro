@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AppUsageTimerPro.View.MainWindow.Settings
+namespace AppUsageTimerPro
 {
     /// <summary>
     /// Interaction logic for SettingsPage.xaml

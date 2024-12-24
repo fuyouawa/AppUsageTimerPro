@@ -1,9 +1,9 @@
-﻿<mah:Flyout x:Class="AppUsageTimerPro.View.Custom.Controls.PopupMessageBox"
+﻿<mah:Flyout x:Class="AppUsageTimerPro.PopupMessageBox"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-            xmlns:local="clr-namespace:AppUsageTimerPro.View.Custom.Controls"
+            xmlns:local="clr-namespace:AppUsageTimerPro"
             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
             mc:Ignorable="d"
@@ -15,9 +15,9 @@
         <local:TypeToIconConverter x:Key="TypeToIconConverter"/>
     </mah:Flyout.Resources>
     <mah:Flyout.Header>
-        <StackPanel x:Name="panel" Orientation="Horizontal">
+        <StackPanel x:Name="Panel" Orientation="Horizontal">
             <ContentControl Content="{Binding MsgType, Converter={StaticResource TypeToIconConverter}}"/>
-            <TextBlock x:Name="tbMessage" Width="auto" VerticalAlignment="Center" FontSize="24" Margin="10, 0, 0, 0"/>
+            <TextBlock x:Name="TxtMessage" Width="auto" VerticalAlignment="Center" FontSize="24" Margin="10, 0, 0, 0"/>
         </StackPanel>
     </mah:Flyout.Header>
 </mah:Flyout>

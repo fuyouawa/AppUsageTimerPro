@@ -1,19 +1,22 @@
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using Serilog;
 
-namespace AppUsageTimerPro.Tools;
-
-public static class DebugHelper
+namespace AppUsageTimerPro
 {
-    public static void Assert(bool condition, string message = "Assert failed", 
-        [CallerMemberName] string memberName = "",
-        [CallerFilePath] string filePath = "",
-        [CallerLineNumber] int lineNumber = 0)
+    public static class DebugHelper
     {
-        if (!condition)
+        public static void Assert([DoesNotReturnIf(false)] bool condition, string message = "Assert failed", 
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
-            Log.Error($"[{filePath}:{memberName}:{lineNumber}] {message}");
+            if (!condition)
+            {
+                var file = Path.GetFileName(filePath);
+                Log.Error($"|{file}:{memberName}:{lineNumber}| {message}");
+            }
         }
     }
 }

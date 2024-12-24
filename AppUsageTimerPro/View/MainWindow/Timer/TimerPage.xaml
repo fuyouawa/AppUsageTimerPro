@@ -1,13 +1,16 @@
-﻿<Page x:Class="AppUsageTimerPro.View.MainWindow.Timer.TimerPage"
+﻿<Page x:Class="AppUsageTimerPro.TimerPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:AppUsageTimerPro.View.MainWindow.Timer"
+      xmlns:local="clr-namespace:AppUsageTimerPro"
       xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
       mc:Ignorable="d"
       d:DesignHeight="400" d:DesignWidth="700">
+    <Page.DataContext>
+        <local:TimerTableViewModel></local:TimerTableViewModel>
+    </Page.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -73,7 +76,14 @@
                   SelectionMode="Single"
                   SelectedItem="{Binding SelectedItem}"
                   SelectedIndex="{Binding SelectedIndex}">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="添加计时器" Command="{Binding AddTimerCmd}" />
+                    <MenuItem Header="删除计时器" Command="{Binding RemoveTimerCmd}" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
+                <local:DataGridIndexRowColumn/>
                 <DataGridTextColumn Header="计时器名称" Binding="{Binding Path=Name}" Width="25*" IsReadOnly="True" CanUserSort="False"/>
                 <DataGridTextColumn Header="总使用时间" Binding="{Binding Path=TotalUsageTimeStr}" Width="20*" IsReadOnly="True" />
                 <DataGridTextColumn Header="今日使用时间" Binding="{Binding Path=TodayTimeStr}" Width="20*" IsReadOnly="True" />

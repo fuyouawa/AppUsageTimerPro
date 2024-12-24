@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using MessagePack;
 
-namespace AppUsageTimerPro.Tools;
+namespace AppUsageTimerPro;
 
 public struct UsageRecord
 {

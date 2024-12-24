@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AppUsageTimerPro.View.MainWindow.Cloud
+namespace AppUsageTimerPro
 {
     /// <summary>
     /// Interaction logic for CloudPage.xaml

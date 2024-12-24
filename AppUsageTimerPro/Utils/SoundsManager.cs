@@ -5,7 +5,7 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppUsageTimerPro.Utils
+namespace AppUsageTimerPro
 {
     public class SoundsManager
     {

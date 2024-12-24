@@ -1,7 +1,7 @@
-﻿using AppUsageTimerPro.Tools;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
-namespace AppUsageTimerPro.Model
+namespace AppUsageTimerPro
 {
     public enum TimerStatus
     {
@@ -12,57 +12,50 @@ namespace AppUsageTimerPro.Model
 
     public class TimerItem
     {
+        public string Name { get; set; }
 
-        private string _name;
+        public TimeSpan TotalUsageTime;
 
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
+        public string TotalUsageTimeStr => TotalUsageTime.ToTimeString();
 
-        private TimeSpan _totalUsageTime = new();
+        public TimeSpan TodayUsageTime;
 
-        public string TotalUsageTimeStr => _totalUsageTime.ToTimeString();
+        public TimeSpan ContinueUsageTime;
 
-        private TimeSpan _todayUsageTime = new();
+        public string TodayTimeStr => TodayUsageTime.ToTimeString();
 
-        private TimeSpan _continueUsageTime = new();
+        public string Tag { get; set; }
 
-        public string TodayTimeStr => _todayUsageTime.ToTimeString();
+        public TimerStatus Status;
 
-        private string _tag;
-
-        public string Tag
-        {
-            get => _tag;
-            set => _tag = value;
-        }
-
-        private TimerStatus _status;
-
-        public string StatusStr => _status switch
+        public string StatusStr => Status switch
         {
             TimerStatus.Running => "运行中",
             TimerStatus.Pausing => "暂停中",
             _ => "待命中",
         };
 
-        private string _appName;
-
-        public string AppName
+        public List<ListenedProcess> ListenedProcesses;
+        
+        public TimerItem(string name, string tag, List<ListenedProcess> listenedProcesses)
+            : this(name, tag, listenedProcesses, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero)
         {
-            get { return _appName; }
-            set { _appName = value; }
+        }
+        
+        public TimerItem(string name, string tag, List<ListenedProcess> listenedProcesses, TimeSpan todayUsageTime, TimeSpan totalUsageTime)
+            : this(name, tag, listenedProcesses, todayUsageTime, totalUsageTime, TimeSpan.Zero)
+        {
         }
 
-
-        public TimerItem(string name, string tag, string appName)
+        public TimerItem(string name, string tag, List<ListenedProcess> listenedProcesses, TimeSpan todayUsageTime, TimeSpan totalUsageTime, TimeSpan continueUsageTime)
         {
-            _name = name;
-            _tag = tag;
-            _status = TimerStatus.Standing;
-            _appName = appName;
+            Name = name;
+            Tag = tag;
+            Status = TimerStatus.Standing;
+            ListenedProcesses = listenedProcesses;
+            TodayUsageTime = todayUsageTime;
+            TotalUsageTime = totalUsageTime;
+            ContinueUsageTime = continueUsageTime;
         }
     }
 }

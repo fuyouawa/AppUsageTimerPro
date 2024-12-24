@@ -1,22 +1,27 @@
-﻿using AppUsageTimerPro.Model;
-using AppUsageTimerPro.Tools;
-using AppUsageTimerPro.Utils;
-using AppUsageTimerPro.View.Custom.Controls;
-using AppUsageTimerPro.View.MainWindow.Timer;
+﻿using System;
+using System.Collections.Generic;
 using MahApps.Metro.Controls.Dialogs;
 using System.Collections.ObjectModel;
-using System.Media;
 using System.Windows;
 
-namespace AppUsageTimerPro.ViewModel
+namespace AppUsageTimerPro
 {
     public class TimerTableViewModel : ViewModelBase
     {
         public ObservableCollection<TimerItem> Collection { get; set; } = new()
         {
-            new TimerItem("Test1", "Tag1", "D:\\General\\Plantform\\CloudMusic\\cloudmusic.exe"),
-            new TimerItem("Test2", "Tag2", "D:\\Tool\\Program\\IDA\\ida64.exe"),
-            new TimerItem("Test3", "Tag3", "D:\\Tool\\Program\\Vmware\\vmware.exe")
+            new TimerItem("Ps", "Ps", new List<ListenedProcess>(), TimeSpan.FromSeconds(1145),
+                TimeSpan.FromSeconds(1419810)),
+            new TimerItem("Ps练习1", "Ps", new List<ListenedProcess>(), TimeSpan.FromSeconds(0),
+                TimeSpan.FromSeconds(19190)),
+            new TimerItem("Ps练习2", "Ps", new List<ListenedProcess>(), TimeSpan.FromSeconds(123),
+                TimeSpan.FromSeconds(11451)),
+            new TimerItem("Unity", "Unity", new List<ListenedProcess>(), TimeSpan.FromSeconds(11451),
+                TimeSpan.FromSeconds(1919810)),
+            new TimerItem("MMORPG", "Unity", new List<ListenedProcess>(), TimeSpan.FromSeconds(0),
+                TimeSpan.FromSeconds(1119810)),
+            new TimerItem("Pokemon", "Unity", new List<ListenedProcess>(), TimeSpan.FromSeconds(11451),
+                TimeSpan.FromSeconds(919810)),
         };
 
         public RelayCommand AddTimerCmd => new(execute => AddTimer());
@@ -27,7 +32,11 @@ namespace AppUsageTimerPro.ViewModel
         public object? SelectedItem
         {
             get { return _selectedItem; }
-            set { _selectedItem = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedItem = value;
+                OnPropertyChanged();
+            }
         }
 
         private int _selectedIndex = 0;
@@ -35,42 +44,45 @@ namespace AppUsageTimerPro.ViewModel
         public int SelectedIndex
         {
             get { return _selectedIndex; }
-            set { _selectedIndex = value; OnPropertyChanged(); }
+            set
+            {
+                _selectedIndex = value;
+                OnPropertyChanged();
+            }
         }
-
 
 
         private AddTimerDialog _addTimerDialog = new();
 
         public TimerTableViewModel()
         {
-            _addTimerDialog.btnCancel.Click += CloseAddTimerDialog;
-            _addTimerDialog.SuccessAddTimerEvent += AddTimerSuccessed;
+            _addTimerDialog.BtnCancel.Click += CloseAddTimerDialog;
+            _addTimerDialog.SuccessAddTimerHandler += AddTimerSuccessed;
         }
 
         private async void AddTimer()
         {
             _addTimerDialog.ClearText();
-            await GlobalManager.Instance.MainWindow.ShowMetroDialogAsync(_addTimerDialog);
+            await MainWindow.Instance.ShowMetroDialogAsync(_addTimerDialog);
         }
 
         private async void CloseAddTimerDialog(object sender, RoutedEventArgs e)
         {
-            await GlobalManager.Instance.MainWindow.HideMetroDialogAsync(_addTimerDialog);
+            await MainWindow.Instance.HideMetroDialogAsync(_addTimerDialog);
         }
 
         private async void AddTimerSuccessed(object? sender, SuccessAddTimerEventArgs e)
         {
             Collection.Add(e.Item);
-            await GlobalManager.Instance.MainWindow.HideMetroDialogAsync(_addTimerDialog);
-            GlobalManager.Instance.MainWindow.ShowPopupMessage("计时器添加成功!");
+            await MainWindow.Instance.HideMetroDialogAsync(_addTimerDialog);
+            MainWindow.Instance.ShowPopupMessage("计时器添加成功!");
             SoundsManager.PlayTip();
         }
 
         private async void RemoveTimer()
         {
             var selectedTimer = Collection[SelectedIndex];
-            var res = await GlobalManager.Instance.MainWindow.ShowMessageAsync(
+            var res = await MainWindow.Instance.ShowMessageAsync(
                 "警告",
                 $"您确定要删除\"{selectedTimer.Name}\"计时器吗?\n此操作不可逆!",
                 MessageDialogStyle.AffirmativeAndNegative,
@@ -78,7 +90,7 @@ namespace AppUsageTimerPro.ViewModel
 
             if (res == MessageDialogResult.Affirmative)
             {
-                var verifName = await GlobalManager.Instance.MainWindow.ShowInputAsync(
+                var verifName = await MainWindow.Instance.ShowInputAsync(
                     "双重验证",
                     $"请确认当前要删除的计时器名称({selectedTimer.Name})",
                     ResourceManager.LocadedDialogSettings);
@@ -86,21 +98,22 @@ namespace AppUsageTimerPro.ViewModel
                     return;
                 if (verifName != selectedTimer.Name)
                 {
-                    GlobalManager.Instance.MainWindow.ShowPopupMessage("验证失败, 计时器名称不一致!", 4000, MessageType.Error);
+                    MainWindow.Instance.ShowPopupMessage("验证失败, 计时器名称不一致!", 4000, MessageType.Error);
                     SoundsManager.PlayError();
                     return;
                 }
+
                 bool suc = Collection.Remove(selectedTimer);
                 if (suc)
                 {
-                    GlobalManager.Instance.MainWindow.ShowPopupMessage("删除成功!", 2000);
+                    MainWindow.Instance.ShowPopupMessage("删除成功!", 2000);
                     SoundsManager.PlayTip();
                     return;
                 }
                 else
                 {
                     SoundsManager.PlayError();
-                    await GlobalManager.Instance.MainWindow.ShowMessageAsync(
+                    await MainWindow.Instance.ShowMessageAsync(
                         "错误",
                         "出现预料之外的错误?\n删除已经被删除的计时器!\n可能是由于程序bug, 请联系开发者",
                         MessageDialogStyle.Affirmative,

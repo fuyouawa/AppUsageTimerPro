@@ -1,60 +1,61 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace AppUsageTimerPro.Tools;
-
-public class ForceScanner : Singleton<ForceScanner>
+namespace AppUsageTimerPro
 {
-    public int MsDelay = 100;
+    public class ForceScanner : Singleton<ForceScanner>
+    {
+        public int MsDelay = 100;
     
-    private Process? _process;
+        private Process? _process;
 
-    public string? ForcedProcessName
-    {
-        get
+        public string? ForcedProcessName
         {
-            lock (this)
+            get
             {
-                return _process?.ProcessName;
+                lock (this)
+                {
+                    return _process?.ProcessName;
+                }
             }
         }
-    }
 
-    public ProcessModule? ForcedProcessModule
-    {
-        get
+        public ProcessModule? ForcedProcessModule
         {
-            lock (this)
+            get
             {
-                return _process?.MainModule;
+                lock (this)
+                {
+                    return _process?.MainModule;
+                }
             }
         }
-    }
 
-    ForceScanner()
-    {
-    }
-
-    public void Initialize()
-    {
-        Task.Run(Scan);
-    }
-
-    private async void Scan()
-    {
-        while (true)
+        ForceScanner()
         {
-            var proc = WindowsHelper.GetForegroundProcess();
-            if (proc != _process)
-            {
-                
-            }
-            lock (this)
-            {
-                _process = proc;
-            }
+        }
 
-            await Task.Delay(MsDelay);
+        public void Initialize()
+        {
+            Task.Run(Scan);
+        }
+
+        private async void Scan()
+        {
+            while (true)
+            {
+                var proc = WindowsHelper.GetForegroundProcess();
+                if (proc != _process)
+                {
+                    //TODO 保存
+                }
+                lock (this)
+                {
+                    _process = proc;
+                }
+
+                await Task.Delay(MsDelay);
+            }
         }
     }
 }

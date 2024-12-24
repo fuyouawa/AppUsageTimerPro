@@ -1,32 +1,15 @@
-﻿using AppUsageTimerPro.Model;
-using AppUsageTimerPro.Utils;
-using MahApps.Metro.Controls.Dialogs;
+﻿using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
-namespace AppUsageTimerPro.View.MainWindow.Timer
+namespace AppUsageTimerPro
 {
-    public class Converter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is double width && parameter is FrameworkElement elem)
-            {
-                return width - elem.ActualHeight - 3;
-            }
-            return 0;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public class SuccessAddTimerEventArgs: EventArgs
     {
         public TimerItem Item { get; internal set; }
@@ -48,63 +31,50 @@ namespace AppUsageTimerPro.View.MainWindow.Timer
             InitializeComponent();
         }
 
-        public event EventHandler<SuccessAddTimerEventArgs>? SuccessAddTimerEvent;
+        public event EventHandler<SuccessAddTimerEventArgs>? SuccessAddTimerHandler;
 
         public void ClearText()
         {
-            tbTimerName.Text = string.Empty;
-            tbTagTag.Text = string.Empty;
-            tbAppName.Text = string.Empty;
-        }
-
-        private void BtnOpenFile_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog dialog = new()
+            TxtTimerName.Text = string.Empty;
+            TxtTagTag.Text = string.Empty;
+            ListenedProcessesGrid.ErrorOccurHandler += (sender, err) =>
             {
-                Title = "选择要监听的应用程序",
-                Filter = "应用程序(*.exe)|*.exe"
+                ErrorOccur(err);
             };
-            if (dialog.ShowDialog() == true)
-            {
-                tbAppName.Text = dialog.FileName;
-            }
         }
 
-        private void BtnOk_Click(object sender, RoutedEventArgs e)
+        private void ErrorOccur(string err)
         {
-            var trimedName = tbTimerName.Text.Trim();
-            var trimedTag = tbTagTag.Text.Trim();
+            TxtError.Text = err;
+            SoundsManager.PlayError();
+        }
+
+        private void OnClickOk(object sender, RoutedEventArgs e)
+        {
+            var trimedName = TxtTimerName.Text.Trim();
+            var trimedTag = TxtTagTag.Text.Trim();
             if (trimedName.Length == 0)
             {
-                tbError.Text = "计时器名称不能为空!";
-                goto error;
+                ErrorOccur("计时器名称不能为空!");
+                return;
             }
             else if (trimedName.Length > 16)
             {
-                tbError.Text = "计时器名称不能超过16个字!";
-                goto error;
+                ErrorOccur("计时器名称不能超过16个字!");
+                return;
             }
             if (trimedTag.Length == 0)
             {
-                tbError.Text = "标签不能为空!";
-                goto error;
+                ErrorOccur("标签不能为空!");
+                return;
             }
             else if (trimedTag.Length > 16)
             {
-                tbError.Text = "标签不能不能超过16个字!";
-                goto error;
+                ErrorOccur("标签不能不能超过16个字!");
+                return;
             }
-            if(!File.Exists(tbAppName.Text))
-            {
-                tbError.Text = "应用程序路径无效!";
-                goto error;
-            }
-            tbError.Text = "";
-            SuccessAddTimerEvent?.Invoke(this, new SuccessAddTimerEventArgs(new TimerItem(trimedName, trimedTag, tbAppName.Text)));
-            return;
-        error:
-            SoundsManager.PlayError();
-            return;
+            TxtError.Text = "";
+            SuccessAddTimerHandler?.Invoke(this, new SuccessAddTimerEventArgs(new TimerItem(trimedName, trimedTag, ListenedProcessesGrid.Model.Collection.ToList())));
         }
     }
 }

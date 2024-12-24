@@ -1,14 +1,8 @@
-﻿using AppUsageTimerPro.Utils;
-using AppUsageTimerPro.View.Custom.Controls;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MahApps.Metro.Controls;
+using System.Windows.Media;
+using System.Windows;
 
-namespace AppUsageTimerPro.Tools
+namespace AppUsageTimerPro
 {
     public static class WpfExtension
     {
@@ -30,8 +24,18 @@ namespace AppUsageTimerPro.Tools
                 AutoCloseInterval = lifeTime,
                 MsgType = type
             };
-            box.tbMessage.Text = message;
+            box.TxtMessage.Text = message;
             window.ShowFlyout(box);
+        }
+
+        public static T? FindParent<T>(this DependencyObject child) where T : DependencyObject
+        {
+            var parentObject = VisualTreeHelper.GetParent(child);
+            if (parentObject == null) return null;
+
+            if (parentObject is T parent) return parent;
+
+            return FindParent<T>(parentObject);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppUsageTimerPro.Utils
+namespace AppUsageTimerPro
 {
     public class ResourceManager
     {

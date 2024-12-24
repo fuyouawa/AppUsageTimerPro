@@ -1,13 +1,7 @@
-using System.Diagnostics;
 using System.Threading.Tasks;
-using AppUsageTimerPro.Tools;
-using AppUsageTimerPro.Utils;
-using AppUsageTimerPro.ViewModel;
-using MahApps.Metro.Controls.Dialogs;
 using System.Windows.Controls;
-using System.Windows.Input;
 
-namespace AppUsageTimerPro.View.MainWindow.Timer
+namespace AppUsageTimerPro
 {
     /// <summary>
     /// Interaction logic for TimerPage.xaml
@@ -17,8 +11,6 @@ namespace AppUsageTimerPro.View.MainWindow.Timer
         public TimerPage()
         {
             InitializeComponent();
-            DataContext = new TimerTableViewModel();
-
             Loaded += (sender, args) =>
             {
                 _isRunning = true;

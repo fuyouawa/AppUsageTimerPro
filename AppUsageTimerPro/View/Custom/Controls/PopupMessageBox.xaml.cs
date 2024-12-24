@@ -1,4 +1,4 @@
-﻿using AppUsageTimerPro.Utils;
+﻿using AppUsageTimerPro;
 using MahApps.Metro.Controls;
 using MahApps.Metro.IconPacks;
 using System;
@@ -20,7 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AppUsageTimerPro.View.Custom.Controls
+namespace AppUsageTimerPro
 {
     public enum MessageType
     {
@@ -87,7 +87,7 @@ namespace AppUsageTimerPro.View.Custom.Controls
         {
             if (IsAutoCloseEnabled)
             {
-                var originMsg = tbMessage.Text;
+                var originMsg = TxtMessage.Text;
 
                 var formatter = delegate (long milliseconds)
                 {
@@ -95,21 +95,21 @@ namespace AppUsageTimerPro.View.Custom.Controls
                     return string.Format("{0:F1}", seconds);
                 };
 
-                tbMessage.Text = formatter(AutoCloseInterval);
+                TxtMessage.Text = formatter(AutoCloseInterval);
                 AdjustPosition(ActualWidth);
                 for (int i = 0; i < AutoCloseInterval / 100; i++)
                 {
                     await Task.Delay(100);
-                    tbMessage.Text = $"{originMsg} ({formatter(AutoCloseInterval - i * 100)}s)";
+                    TxtMessage.Text = $"{originMsg} ({formatter(AutoCloseInterval - i * 100)}s)";
                 }
-                tbMessage.Text = originMsg;
+                TxtMessage.Text = originMsg;
             }
         }
 
 
         private void AdjustPosition(double newWidth)
         {
-            panel.Margin = new Thickness((newWidth - tbMessage.ActualWidth - IconWidth - 10) / 2 - 60, 0, 0, 0);
+            Panel.Margin = new Thickness((newWidth - TxtMessage.ActualWidth - IconWidth - 10) / 2 - 60, 0, 0, 0);
         }
     }
 }

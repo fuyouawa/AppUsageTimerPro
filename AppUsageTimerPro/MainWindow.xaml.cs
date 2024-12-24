@@ -1,4 +1,4 @@
-﻿using AppUsageTimerPro.Utils;
+﻿using System;
 using MahApps.Metro.Controls;
 
 namespace AppUsageTimerPro
@@ -8,9 +8,21 @@ namespace AppUsageTimerPro
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        private static MainWindow? _instance;
+
+        public static MainWindow Instance
+        {
+            get
+            {
+                DebugHelper.Assert(_instance != null);
+                return _instance;
+            }
+        }
+
         public MainWindow()
         {
-            GlobalManager.Instance.MainWindow = this;
+            DebugHelper.Assert(_instance == null);
+            _instance = this;
             InitializeComponent();
         }
     }
