@@ -12,15 +12,15 @@ using System.Windows.Media;
 namespace AppUsageTimerPro
 {
     /// <summary>
-    /// ListenedProcessesGrid.xaml 的交互逻辑
+    /// ListenedAppsGrid.xaml 的交互逻辑
     /// </summary>
-    public partial class ListenedProcessesGrid : UserControl
+    public partial class ListenedAppsGrid : UserControl
     {
         public event EventHandler<string>? ErrorOccurHandler;
 
-        public ListenedProcessesViewModel Model => (ListenedProcessesViewModel)DataContext;
+        public ListenedAppsViewModel Model => (ListenedAppsViewModel)DataContext;
 
-        public ListenedProcessesGrid()
+        public ListenedAppsGrid()
         {
             InitializeComponent();
         }
@@ -34,7 +34,7 @@ namespace AppUsageTimerPro
             };
             if (dialog.ShowDialog() == true)
             {
-                TxtListenAppName.Text = Path.GetFileName(dialog.FileName);
+                TxtListenAppName.Text = Path.GetFileNameWithoutExtension(dialog.FileName);
             }
         }
 

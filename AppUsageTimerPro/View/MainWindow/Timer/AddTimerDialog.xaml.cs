@@ -1,12 +1,7 @@
 ﻿using MahApps.Metro.Controls.Dialogs;
-using Microsoft.Win32;
 using System;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Data;
 
 namespace AppUsageTimerPro
 {
@@ -37,7 +32,7 @@ namespace AppUsageTimerPro
         {
             TxtTimerName.Text = string.Empty;
             TxtTagTag.Text = string.Empty;
-            ListenedProcessesGrid.ErrorOccurHandler += (sender, err) =>
+            ListenedAppsGrid.ErrorOccurHandler += (sender, err) =>
             {
                 ErrorOccur(err);
             };
@@ -58,7 +53,8 @@ namespace AppUsageTimerPro
                 ErrorOccur("计时器名称不能为空!");
                 return;
             }
-            else if (trimedName.Length > 16)
+
+            if (trimedName.Length > 16)
             {
                 ErrorOccur("计时器名称不能超过16个字!");
                 return;
@@ -68,13 +64,21 @@ namespace AppUsageTimerPro
                 ErrorOccur("标签不能为空!");
                 return;
             }
-            else if (trimedTag.Length > 16)
+
+            if (trimedTag.Length > 16)
             {
                 ErrorOccur("标签不能不能超过16个字!");
                 return;
             }
+
+            var apps = ListenedAppsGrid.Model.Collection.ToList();
+            if (apps.Count == 0)
+            {
+                ErrorOccur("必须有至少一个监听的应用!");
+                return;
+            }
             TxtError.Text = "";
-            SuccessAddTimerHandler?.Invoke(this, new SuccessAddTimerEventArgs(new TimerItem(trimedName, trimedTag, ListenedProcessesGrid.Model.Collection.ToList())));
+            SuccessAddTimerHandler?.Invoke(this, new SuccessAddTimerEventArgs(new TimerItem(trimedName, trimedTag, apps)));
         }
     }
 }

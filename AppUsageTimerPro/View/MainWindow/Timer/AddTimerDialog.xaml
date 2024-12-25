@@ -17,7 +17,7 @@
         <TextBox x:Name="TxtTagTag"
                  mah:TextBoxHelper.ClearTextButton="True"
                  mah:TextBoxHelper.Watermark="标签......(1-16字)" Margin="0, 5, 0, 0"/>
-        <local:ListenedProcessesGrid x:Name="ListenedProcessesGrid" MaxHeight="160" Height="160"></local:ListenedProcessesGrid>
+        <local:ListenedAppsGrid x:Name="ListenedAppsGrid" MaxHeight="160" Height="160"></local:ListenedAppsGrid>
         <StackPanel Orientation="Horizontal"
                     Margin="0, 5, 0, 0"
                     HorizontalAlignment="Right">

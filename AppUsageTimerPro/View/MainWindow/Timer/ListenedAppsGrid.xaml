@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AppUsageTimerPro.ListenedProcessesGrid"
+﻿<UserControl x:Class="AppUsageTimerPro.ListenedAppsGrid"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,7 +9,7 @@
              mc:Ignorable="d"
              d:DesignWidth="800">
     <UserControl.DataContext>
-        <local:ListenedProcessesViewModel></local:ListenedProcessesViewModel>
+        <local:ListenedAppsViewModel></local:ListenedAppsViewModel>
     </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>

@@ -16,13 +16,13 @@ namespace AppUsageTimerPro
 
         public TimeSpan TotalUsageTime;
 
-        public string TotalUsageTimeStr => TotalUsageTime.ToTimeString();
+        public string TotalUsageTimeStr => TotalUsageTime.ToDisplayTimeString();
 
         public TimeSpan TodayUsageTime;
 
         public TimeSpan ContinueUsageTime;
 
-        public string TodayTimeStr => TodayUsageTime.ToTimeString();
+        public string TodayTimeStr => TodayUsageTime.ToDisplayTimeString();
 
         public string Tag { get; set; }
 

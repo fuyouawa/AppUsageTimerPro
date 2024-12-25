@@ -11,41 +11,35 @@ namespace AppUsageTimerPro
         public readonly string SaveDir;
 
         public readonly string LogSaveDir;
+        public readonly string UsageSaveDir;
+        public readonly string TimerSaveDir;
+        public readonly string ConfigSaveDir;
 
         DataManager()
         {
             LocalAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             SaveDir = Path.Combine(LocalAppData, "AppUsageTimerPro");
             LogSaveDir = Path.Combine(SaveDir, "Logs");
-        }
+            UsageSaveDir = Path.Combine(SaveDir, "Usage");
+            TimerSaveDir = Path.Combine(SaveDir, "Timers");
+            ConfigSaveDir = Path.Combine(SaveDir, "Config");
 
-        private FileStream EnsureOpenFile(string path, FileAccess access)
-        {
-            var dir = Path.GetDirectoryName(path);
-            DebugHelper.Assert(dir != null);
-
-            if (!Directory.Exists(dir))
-            {
-                var info = Directory.CreateDirectory(dir);
-                DebugHelper.Assert(info.Exists, $"创建文件夹失败：{path}");
-            }
-
-            var file = File.Open(path, FileMode.OpenOrCreate, access);
-            DebugHelper.Assert(file != null, $"打开（或创建）文件失败：{path}");
-            return file;
+            Directory.CreateDirectory(UsageSaveDir);
+            Directory.CreateDirectory(TimerSaveDir);
+            Directory.CreateDirectory(ConfigSaveDir);
         }
 
         public void Save(string filename, byte[] data)
         {
             var path = Path.Combine(SaveDir, filename);
-            var file = EnsureOpenFile(path, FileAccess.Write);
+            var file = File.OpenWrite(path);
             file.Write(data);
         }
 
         public ValueTask SaveAsync(string filename, byte[] data)
         {
             var path = Path.Combine(SaveDir, filename);
-            var file = EnsureOpenFile(path, FileAccess.Write);
+            var file = File.OpenWrite(path);
             return file.WriteAsync(data);
         }
     }

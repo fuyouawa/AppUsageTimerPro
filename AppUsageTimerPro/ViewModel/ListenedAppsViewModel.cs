@@ -2,12 +2,12 @@
 
 namespace AppUsageTimerPro;
 
-public class ListenedProcessesViewModel : ViewModelBase
+public class ListenedAppsViewModel : ViewModelBase
 {
     public ObservableCollection<ListenedProcess> Collection { get; set; } = new()
     {
-        new ListenedProcess("asda.exe"),
-        new ListenedProcess("assdfda345.exe"),
+        new ListenedProcess("asda"),
+        new ListenedProcess("assdfda345"),
     };
 
     private object? _selectedItem;
