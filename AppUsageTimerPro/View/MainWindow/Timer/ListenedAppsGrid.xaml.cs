@@ -46,7 +46,7 @@ namespace AppUsageTimerPro
                 return;
             }
             
-            Model.Collection.Add(new ListenedProcess(TxtListenAppName.Text));
+            Model.Collection.Add(new ListenedApp(TxtListenAppName.Text));
             TxtListenAppName.Clear();
         }
 

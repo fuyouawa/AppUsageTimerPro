@@ -8,21 +8,7 @@ namespace AppUsageTimerPro
 {
     public class TimerTableViewModel : ViewModelBase
     {
-        public ObservableCollection<TimerItem> Collection { get; set; } = new()
-        {
-            new TimerItem("Ps", "Ps", new List<ListenedProcess>(), TimeSpan.FromSeconds(1145),
-                TimeSpan.FromSeconds(1419810)),
-            new TimerItem("Ps练习1", "Ps", new List<ListenedProcess>(), TimeSpan.FromSeconds(0),
-                TimeSpan.FromSeconds(19190)),
-            new TimerItem("Ps练习2", "Ps", new List<ListenedProcess>(), TimeSpan.FromSeconds(123),
-                TimeSpan.FromSeconds(11451)),
-            new TimerItem("Unity", "Unity", new List<ListenedProcess>(), TimeSpan.FromSeconds(11451),
-                TimeSpan.FromSeconds(1919810)),
-            new TimerItem("MMORPG", "Unity", new List<ListenedProcess>(), TimeSpan.FromSeconds(0),
-                TimeSpan.FromSeconds(1119810)),
-            new TimerItem("Pokemon", "Unity", new List<ListenedProcess>(), TimeSpan.FromSeconds(11451),
-                TimeSpan.FromSeconds(919810)),
-        };
+        public ObservableCollection<TimerItem> Collection { get; set; } = new();
 
         public RelayCommand AddTimerCmd => new(execute => AddTimer());
         public RelayCommand RemoveTimerCmd => new(execute => RemoveTimer(), canExecute => SelectedItem != null);

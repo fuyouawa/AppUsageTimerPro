@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
@@ -141,7 +142,7 @@ public class UsageRecordManager : Singleton<UsageRecordManager>
 
         FileHelper.CreateIfNotExist(AppIndexSavePath);
 
-        var json = File.ReadAllText(AppIndexSavePath);
+        var json = FileHelper.ReadAllTextWithHash(AppIndexSavePath);
         _appIndexTable = JsonConvert.DeserializeObject<AppIndexTable>(json) ?? new AppIndexTable();
 
         Task.Run(AutoSaveLoop);
@@ -183,7 +184,7 @@ public class UsageRecordManager : Singleton<UsageRecordManager>
             // 如果有新增app，保存app索引表
             if (_appIndexTable.CheckChange())
             {
-                await File.WriteAllTextAsync(AppIndexSavePath, JsonConvert.SerializeObject(_appIndexTable));
+                await FileHelper.WriteAllTextWithHashAsync(AppIndexSavePath, JsonConvert.SerializeObject(_appIndexTable));
             }
 
             if (_recordsSaveQueue.Count > 0)
@@ -197,12 +198,12 @@ public class UsageRecordManager : Singleton<UsageRecordManager>
                     FileHelper.CreateIfNotExist(path);
 
                     // 读取json并反序列化
-                    var json = await File.ReadAllTextAsync(path);
+                    var json = await FileHelper.ReadAllTextWithHashAsync(path);
                     var res = JsonConvert.DeserializeObject<UsageRecordList>(json) ?? new UsageRecordList();
                     // 将记录队列中的值与原值合并
                     res.AddRange(records.Value);
                     // 保存
-                    await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(res));
+                    await FileHelper.WriteAllTextWithHashAsync(path, JsonConvert.SerializeObject(res));
                 }
 
                 _recordsSaveQueue.Clear();

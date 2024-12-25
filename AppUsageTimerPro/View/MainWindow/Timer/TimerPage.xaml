@@ -85,10 +85,10 @@
             <DataGrid.Columns>
                 <local:DataGridIndexRowColumn/>
                 <DataGridTextColumn Header="计时器名称" Binding="{Binding Path=Name}" Width="25*" IsReadOnly="True" CanUserSort="False"/>
-                <DataGridTextColumn Header="总使用时间" Binding="{Binding Path=TotalUsageTimeStr}" Width="20*" IsReadOnly="True" />
-                <DataGridTextColumn Header="今日使用时间" Binding="{Binding Path=TodayTimeStr}" Width="20*" IsReadOnly="True" />
+                <DataGridTextColumn Header="总使用时间" Binding="{Binding Path=TotalUsageSpanDisplay}" Width="20*" IsReadOnly="True" />
+                <DataGridTextColumn Header="今日使用时间" Binding="{Binding Path=TodayUsageSpanDisplay}" Width="20*" IsReadOnly="True" />
                 <DataGridTextColumn Header="标签" Binding="{Binding Path=Tag}" Width="10*" IsReadOnly="True" CanUserSort="False"/>
-                <DataGridTextColumn Header="状态" Binding="{Binding Path=StatusStr}" Width="10*" IsReadOnly="True" CanUserSort="False"/>
+                <DataGridTextColumn Header="状态" Binding="{Binding Path=StatusDisplay}" Width="10*" IsReadOnly="True" CanUserSort="False"/>
                 <DataGridTemplateColumn Header="操作" Width="15*" IsReadOnly="True" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

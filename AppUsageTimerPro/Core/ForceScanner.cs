@@ -10,8 +10,8 @@ namespace AppUsageTimerPro
     {
         public Process? CurrentForcedProcess { get; private set; }
         
-        private DispatcherTimer _timer;
-        private readonly TimeSpan _delay = TimeSpan.FromMilliseconds(16);
+        private DispatcherTimer _timer = new();
+        private readonly TimeSpan _interval = TimeSpan.FromMilliseconds(16);
 
 
         ForceScanner()
@@ -20,8 +20,7 @@ namespace AppUsageTimerPro
 
         public void Initialize()
         {
-            _timer = new DispatcherTimer();
-            _timer.Interval = _delay;
+            _timer.Interval = _interval;
             _timer.Tick += Scan;
             _timer.Start();
         }

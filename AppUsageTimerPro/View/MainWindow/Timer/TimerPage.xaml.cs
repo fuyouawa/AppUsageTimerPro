@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace AppUsageTimerPro
 {
@@ -8,33 +10,38 @@ namespace AppUsageTimerPro
     /// </summary>
     public partial class TimerPage : Page
     {
+        private DispatcherTimer _timer = new();
+        private TimeSpan _interval = TimeSpan.FromMilliseconds(500);
+
         public TimerPage()
         {
             InitializeComponent();
+
+            _timer.Interval = _interval;
+            _timer.Tick += Update;
+
             Loaded += (sender, args) =>
             {
-                _isRunning = true;
+                _timer.Start();
             };
 
             Unloaded += (sender, args) =>
             {
-                _isRunning = false;
+                _timer.Stop();
             };
         }
 
-        private bool _isRunning = true;
 
-        private async void Update()
+        private void Update(object? sender, EventArgs args)
         {
             var model = (TimerTableViewModel)DataContext;
-            while (_isRunning)
-            {
 
-                foreach (var item in model.Collection)
-                {
-                    
-                }
-                await Task.Delay(1000);
+            var proc = ForceScanner.Instance.CurrentForcedProcess;
+            if (proc == null) return;
+
+            foreach (var item in model.Collection)
+            {
+                
             }
         }
     }

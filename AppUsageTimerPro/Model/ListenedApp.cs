@@ -2,11 +2,11 @@
 
 namespace AppUsageTimerPro
 {
-    public class ListenedProcess
+    public class ListenedApp
     {
         public string Name { get; set; }
 
-        public ListenedProcess(string name)
+        public ListenedApp(string name)
         {
             Name = name;
         }

@@ -28,19 +28,5 @@ namespace AppUsageTimerPro
             Directory.CreateDirectory(TimerSaveDir);
             Directory.CreateDirectory(ConfigSaveDir);
         }
-
-        public void Save(string filename, byte[] data)
-        {
-            var path = Path.Combine(SaveDir, filename);
-            var file = File.OpenWrite(path);
-            file.Write(data);
-        }
-
-        public ValueTask SaveAsync(string filename, byte[] data)
-        {
-            var path = Path.Combine(SaveDir, filename);
-            var file = File.OpenWrite(path);
-            return file.WriteAsync(data);
-        }
     }
 }
