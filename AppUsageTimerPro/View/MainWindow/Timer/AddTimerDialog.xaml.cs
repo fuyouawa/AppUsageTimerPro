@@ -7,11 +7,11 @@ namespace AppUsageTimerPro
 {
     public class SuccessAddTimerEventArgs: EventArgs
     {
-        public TimerItem Item { get; internal set; }
+        public TimerItem Timer { get; internal set; }
 
-        public SuccessAddTimerEventArgs(TimerItem item)
+        public SuccessAddTimerEventArgs(TimerItem timer)
         {
-            Item = item;
+            Timer = timer;
         }
     }
 
@@ -26,13 +26,13 @@ namespace AppUsageTimerPro
             InitializeComponent();
         }
 
-        public event EventHandler<SuccessAddTimerEventArgs>? SuccessAddTimerHandler;
+        public event EventHandler<SuccessAddTimerEventArgs>? SuccessAddTimerEvent;
 
         public void ClearText()
         {
             TxtTimerName.Text = string.Empty;
             TxtTagTag.Text = string.Empty;
-            ListenedAppsGrid.ErrorOccurHandler += (sender, err) =>
+            ListenedAppsGrid.ErrorOccurEvent += (sender, err) =>
             {
                 ErrorOccur(err);
             };
@@ -71,14 +71,14 @@ namespace AppUsageTimerPro
                 return;
             }
 
-            var apps = ListenedAppsGrid.Model.Collection.ToList();
+            var apps = new ListenedAppList(ListenedAppsGrid.ViewModel.Collection);
             if (apps.Count == 0)
             {
                 ErrorOccur("必须有至少一个监听的应用!");
                 return;
             }
             TxtError.Text = "";
-            SuccessAddTimerHandler?.Invoke(this, new SuccessAddTimerEventArgs(new TimerItem(trimedName, trimedTag, apps)));
+            SuccessAddTimerEvent?.Invoke(this, new SuccessAddTimerEventArgs(new TimerItem(trimedName, trimedTag, apps)));
         }
     }
 }

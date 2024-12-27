@@ -16,9 +16,9 @@ namespace AppUsageTimerPro
     /// </summary>
     public partial class ListenedAppsGrid : UserControl
     {
-        public event EventHandler<string>? ErrorOccurHandler;
+        public event EventHandler<string>? ErrorOccurEvent;
 
-        public ListenedAppsViewModel Model => (ListenedAppsViewModel)DataContext;
+        public ListenedAppsViewModel ViewModel => (ListenedAppsViewModel)DataContext;
 
         public ListenedAppsGrid()
         {
@@ -42,11 +42,11 @@ namespace AppUsageTimerPro
         {
             if (string.IsNullOrWhiteSpace(TxtListenAppName.Text))
             {
-                ErrorOccurHandler?.Invoke(this, "无效应用名称");
+                ErrorOccurEvent?.Invoke(this, "无效应用名称");
                 return;
             }
             
-            Model.Collection.Add(new ListenedApp(TxtListenAppName.Text));
+            ViewModel.Collection.Add(new ListenedApp(TxtListenAppName.Text));
             TxtListenAppName.Clear();
         }
 
@@ -56,7 +56,7 @@ namespace AppUsageTimerPro
             var row = btn.FindParent<DataGridRow>();
             if (row != null)
             {
-                Model.Collection.RemoveAt(row.GetIndex());
+                ViewModel.Collection.RemoveAt(row.GetIndex());
             }
         }
     }

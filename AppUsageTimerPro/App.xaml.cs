@@ -1,8 +1,5 @@
-using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using AppUsageTimerPro;
 using Serilog;
 
 namespace AppUsageTimerPro
@@ -22,7 +19,7 @@ namespace AppUsageTimerPro
                 .WriteTo.Sink(new LogSink())
                 .CreateLogger();
 
-            ForceScanner.Instance.Initialize();
+            LogicManager.Instance.Initialize();
         }
     }
 }

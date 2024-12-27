@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -12,22 +13,59 @@ namespace AppUsageTimerPro
         Standing
     }
 
-    public class TimerDayUsageTime
+    public class TimerDayUsageTime : ICloneable
     {
         public DateTime Day;
         public TimeSpan Span;
+
+        public TimerDayUsageTime(DateTime day, TimeSpan span)
+        {
+            Day = day;
+            Span = span;
+        }
+
+        public object Clone()
+        {
+            return new TimerDayUsageTime(Day, Span);
+        }
     }
 
-    public class TimerItem
+    public class DayUsageTimeList : List<TimerDayUsageTime>
+    {
+        public DayUsageTimeList() {}
+        public DayUsageTimeList(int capacity) : base(capacity) { }
+        public DayUsageTimeList(IEnumerable<TimerDayUsageTime> collection) : base(collection) {}
+    }
+
+    public class ParseDateRecordList : List<DateTime>
+    {
+        public ParseDateRecordList() {}
+        public ParseDateRecordList(int capacity) : base(capacity) { }
+        public ParseDateRecordList(IEnumerable<DateTime> collection) : base(collection) {}
+    }
+
+    public class ListenedAppList : List<ListenedApp>
+    {
+        public ListenedAppList() {}
+        public ListenedAppList(int capacity) : base(capacity) { }
+        public ListenedAppList(IEnumerable<ListenedApp> collection) : base(collection) {}
+
+        public bool ContainAppName(string appName)
+        {
+            return this.FirstOrDefault(app => app.Name == appName) != null;
+        }
+    }
+
+    public class TimerItem : ViewModelBase, ICloneable
     {
         public string Name { get; set; }
 
-        public List<TimerDayUsageTime> DayUsageTimes { get; }
+        public DayUsageTimeList DayUsageTimes { get; }
 
         public bool Parsing { get; set; }
-        public List<DateTime> ParseDateRecords { get; }
+        public ParseDateRecordList ParseDateRecords { get; }
 
-        public List<ListenedApp> ListenedApps { get; }
+        public ListenedAppList ListenedApps { get; }
 
         public string Tag { get; set; }
         
@@ -47,7 +85,7 @@ namespace AppUsageTimerPro
                 {
                     _totalUsageSpanExceptToday += time.Span;
 
-                    time = new TimerDayUsageTime() { Day = DateTime.Today, Span = TimeSpan.Zero };
+                    time = new TimerDayUsageTime(DateTime.Today, TimeSpan.Zero);
                     DayUsageTimes.Add(time);
                 }
                 return time;
@@ -66,12 +104,12 @@ namespace AppUsageTimerPro
             _ => "待命中",
         };
 
-        public TimerItem(string name, string tag, List<ListenedApp> listenedApps)
-            : this(name, tag, listenedApps, new List<TimerDayUsageTime>(), new List<DateTime>())
+        public TimerItem(string name, string tag, ListenedAppList listenedApps)
+            : this(name, tag, listenedApps, new DayUsageTimeList(), new ParseDateRecordList())
         {
         }
 
-        public TimerItem(string name, string tag, List<ListenedApp> listenedApps, List<TimerDayUsageTime> dayUsageTimes, List<DateTime> parseDateRecords)
+        public TimerItem(string name, string tag, ListenedAppList listenedApps, DayUsageTimeList dayUsageTimes, ParseDateRecordList parseDateRecords)
         {
             Name = name;
             Tag = tag;
@@ -81,14 +119,9 @@ namespace AppUsageTimerPro
             ParseDateRecords = parseDateRecords;
 
             var today = DateTime.Today;
-            if (dayUsageTimes.Count == 0)
+            if (dayUsageTimes.Count == 0 || dayUsageTimes[^1].Day != today)
             {
-                dayUsageTimes[0] = new TimerDayUsageTime() { Day = today };
-            }
-
-            if (dayUsageTimes[^1].Day != today)
-            {
-                dayUsageTimes.Add(new TimerDayUsageTime() { Day = today });
+                dayUsageTimes.Add(new TimerDayUsageTime(today, TimeSpan.Zero));
             }
 
             for (int i = 0; i < dayUsageTimes.Count - 1; i++)
@@ -109,6 +142,34 @@ namespace AppUsageTimerPro
             {
                 Parsing = false;
             }
+        }
+
+        public string ApplyChange(TimerChangedTypes changedTypes, object value)
+        {
+            switch (changedTypes)
+            {
+                case TimerChangedTypes.SpanOfTodayUsageTime:
+                    TodayUsageTime.Span = (TimeSpan)value;
+                    return nameof(TodayUsageSpanDisplay);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(changedTypes), changedTypes, null);
+            }
+        }
+
+        public string ApplyChangeWithEvent(TimerChangedTypes changedTypes, object value)
+        {
+            var name = ApplyChange(changedTypes, value);
+            OnPropertyChanged(name);
+            return name;
+        }
+
+        public object Clone()
+        {
+            return new TimerItem(Name, Tag, ListenedApps, DayUsageTimes, ParseDateRecords)
+            {
+                Parsing = Parsing,
+                Status = Status
+            };
         }
     }
 
@@ -152,11 +213,11 @@ namespace AppUsageTimerPro
             var name = obj["Name"]!.ToString();
             var tag = obj["Tag"]!.ToString();
 
-            var listenedApps = obj["ListenedApps"]!.ToObject<List<ListenedApp>>()!;
-            var dayUsageTimes = obj["DayUsageTimes"]!.ToObject<List<TimerDayUsageTime>>()!;
+            var listenedApps = obj["ListenedApps"]!.ToObject<ListenedAppList>()!;
+            var dayUsageTimes = obj["DayUsageTimes"]!.ToObject<DayUsageTimeList>()!;
 
             var parsing = obj["Parsing"]!.ToObject<bool>();
-            var parseDateRecords = obj["ParseDateRecords"]!.ToObject<List<DateTime>>()!;
+            var parseDateRecords = obj["ParseDateRecords"]!.ToObject<ParseDateRecordList>()!;
 
             var res = new TimerItem(name, tag, listenedApps, dayUsageTimes, parseDateRecords)
             {

@@ -10,7 +10,7 @@ namespace AppUsageTimerPro
         }
         public static string ToDisplayTimeString(this TimeSpan span)
         {
-            return $"{(long)span.TotalHours}时{span.Minutes:D2}分{span.Seconds:D2}秒";
+            return $"{Math.Floor(span.TotalHours):00}:{span.Minutes:00}:{span.Seconds:00}.{span.Milliseconds / 10:00}";
         }
     }
 }

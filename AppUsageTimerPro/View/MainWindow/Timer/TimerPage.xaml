@@ -9,7 +9,7 @@
       mc:Ignorable="d"
       d:DesignHeight="400" d:DesignWidth="700">
     <Page.DataContext>
-        <local:TimerTableViewModel></local:TimerTableViewModel>
+        <local:TimerPageViewModel></local:TimerPageViewModel>
     </Page.DataContext>
     <Grid>
         <Grid.RowDefinitions>
@@ -23,23 +23,23 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" Margin="10, 0, 0, 0">
-                <Button Command="{Binding AddTimerCmd}"
-                        Style="{DynamicResource MahApps.Styles.Button.Circle}"
+                <Button Style="{DynamicResource MahApps.Styles.Button.Circle}"
                         Width="23"
                         Height="23"
                         Margin="0, 0, 3, 0"
                         Padding="0"
                         BorderThickness="0"
+                        Click="OnClickAddTimer"
                         ToolTip="添加计时器">
                     <iconPacks:PackIconMaterialDesign Kind="AddAlarm" Width="21" Height="21" />
                 </Button>
-                <Button Command="{Binding RemoveTimerCmd}"
-                        Style="{DynamicResource MahApps.Styles.Button.Circle}"
+                <Button Style="{DynamicResource MahApps.Styles.Button.Circle}"
                         Width="23"
                         Height="23"
                         Margin="0, 0, 3, 0"
                         Padding="0"
                         BorderThickness="0"
+                        Click="OnClickRemoveTimer"
                         ToolTip="删除计时器">
                     <iconPacks:PackIconVaadinIcons Kind="Trash" Width="21" Height="21" />
                 </Button>
@@ -76,12 +76,6 @@
                   SelectionMode="Single"
                   SelectedItem="{Binding SelectedItem}"
                   SelectedIndex="{Binding SelectedIndex}">
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="添加计时器" Command="{Binding AddTimerCmd}" />
-                    <MenuItem Header="删除计时器" Command="{Binding RemoveTimerCmd}" />
-                </ContextMenu>
-            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <local:DataGridIndexRowColumn/>
                 <DataGridTextColumn Header="计时器名称" Binding="{Binding Path=Name}" Width="25*" IsReadOnly="True" CanUserSort="False"/>

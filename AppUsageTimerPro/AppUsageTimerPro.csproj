@@ -17,4 +17,13 @@
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="EasyFramework">
+      <HintPath>..\..\..\Framework\EasyUiFramework\EasyUiFramework\bin\Debug\net6.0-windows\EasyFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyUiFramework">
+      <HintPath>..\..\..\Framework\EasyUiFramework\EasyUiFramework\bin\Debug\net6.0-windows\EasyUiFramework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

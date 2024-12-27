@@ -4,23 +4,24 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using EasyFramework;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 
-namespace AppUsageTimerPro;
+namespace AppUsageTimerPro.Logic;
 
-public struct UsageRecord
+internal struct UsageRecord
 {
     public TimeSpan Span { get; set; }
     public int AppIndex { get; set; }
 }
 
-public class UsageRecordList : List<UsageRecord> {}
+internal class UsageRecordList : List<UsageRecord> {}
 
-public class AppIndexTable : List<string>
+internal class AppIndexTable : List<string>
 {
-    public AppIndexTable() : base() {}
+    public AppIndexTable() {}
     public AppIndexTable(int capacity) : base(capacity) { }
     public AppIndexTable(IEnumerable<string> collection) : base(collection) {}
 
@@ -57,7 +58,7 @@ public class AppIndexTable : List<string>
     }
 }
 
-public class UsageRecordListConverter : JsonConverter<UsageRecordList>
+internal class UsageRecordListConverter : JsonConverter<UsageRecordList>
 {
     public override void WriteJson(JsonWriter writer, UsageRecordList? value, JsonSerializer serializer)
     {
@@ -91,7 +92,7 @@ public class UsageRecordListConverter : JsonConverter<UsageRecordList>
     }
 }
 
-public class AppIndexTableConverter : JsonConverter<AppIndexTable>
+internal class AppIndexTableConverter : JsonConverter<AppIndexTable>
 {
     public override void WriteJson(JsonWriter writer, AppIndexTable? value, JsonSerializer serializer)
     {
@@ -125,11 +126,13 @@ public class AppIndexTableConverter : JsonConverter<AppIndexTable>
     }
 }
 
-public class UsageRecordManager : Singleton<UsageRecordManager>
+internal class UsageRecordManager : Singleton<UsageRecordManager>
 {
     private AppIndexTable _appIndexTable;
 
     private Dictionary<DateTime, UsageRecordList> _recordsSaveQueue = new();
+    private TimeSpan _autoSaveIntervalCounter;
+    private TimeSpan _autoSaveInterval;
 
     public readonly string AppIndexSavePath;
 
@@ -145,26 +148,20 @@ public class UsageRecordManager : Singleton<UsageRecordManager>
         var json = FileHelper.ReadAllTextWithHash(AppIndexSavePath);
         _appIndexTable = JsonConvert.DeserializeObject<AppIndexTable>(json) ?? new AppIndexTable();
 
-        Task.Run(AutoSaveLoop);
+        _autoSaveInterval = SettingsManager.Instance.Settings.AutoSaveInterval.Value;
+        SettingsManager.Instance.Settings.AutoSaveInterval.Register(span =>
+            LogicManager.Instance.Invoke(() => _autoSaveInterval = span));
     }
 
-
-    private async Task AutoSaveLoop()
+    public void FixedUpdate(TimeSpan deltaTime)
     {
-        try
+        if (_autoSaveIntervalCounter >= _autoSaveInterval)
         {
-            while (true)
-            {
-                await Task.Delay(SettingsManager.Instance.Settings.AutoSaveInterval);
-                await SaveAsync();
-            }
+            _autoSaveIntervalCounter = TimeSpan.Zero;
+            Task.Run(SaveAsync);
         }
-        catch (Exception e)
-        {
-            Log.Error(e, "×Ô¶¯±£´æÊ¹ÓÃ¼ÇÂ¼Ê±³öÏÖ´íÎó");
-        }
+        _autoSaveInterval += deltaTime;
     }
-
 
     public void AddRecord(DateTime time, string? appName)
     {
@@ -181,7 +178,7 @@ public class UsageRecordManager : Singleton<UsageRecordManager>
     {
         try
         {
-            // Èç¹ûÓĞĞÂÔöapp£¬±£´æappË÷Òı±í
+            // å¦‚æœæœ‰æ–°å¢appï¼Œä¿å­˜appç´¢å¼•è¡¨
             if (_appIndexTable.CheckChange())
             {
                 await FileHelper.WriteAllTextWithHashAsync(AppIndexSavePath, JsonConvert.SerializeObject(_appIndexTable));
@@ -191,18 +188,18 @@ public class UsageRecordManager : Singleton<UsageRecordManager>
             {
                 foreach (var records in _recordsSaveQueue)
                 {
-                    // »ñÈ¡ÈÕÆÚ¶ÔÓ¦µÄ¼ÇÂ¼ÎÄ¼ş
+                    // è·å–æ—¥æœŸå¯¹åº”çš„è®°å½•æ–‡ä»¶
                     var path = Path.Combine(DataManager.Instance.UsageSaveDir,
                         records.Key.ToString("yyyy-MM-dd") + ".json");
                     
                     FileHelper.CreateIfNotExist(path);
 
-                    // ¶ÁÈ¡json²¢·´ĞòÁĞ»¯
+                    // è¯»å–jsonå¹¶ååºåˆ—åŒ–
                     var json = await FileHelper.ReadAllTextWithHashAsync(path);
                     var res = JsonConvert.DeserializeObject<UsageRecordList>(json) ?? new UsageRecordList();
-                    // ½«¼ÇÂ¼¶ÓÁĞÖĞµÄÖµÓëÔ­ÖµºÏ²¢
+                    // å°†è®°å½•é˜Ÿåˆ—ä¸­çš„å€¼ä¸åŸå€¼åˆå¹¶
                     res.AddRange(records.Value);
-                    // ±£´æ
+                    // ä¿å­˜
                     await FileHelper.WriteAllTextWithHashAsync(path, JsonConvert.SerializeObject(res));
                 }
 
@@ -211,7 +208,7 @@ public class UsageRecordManager : Singleton<UsageRecordManager>
         }
         catch (Exception e)
         {
-            Log.Error(e, "±£´æÊ¹ÓÃ¼ÇÂ¼Ê±³öÏÖ´íÎó");
+            Log.Error(e, "ä¿å­˜ä½¿ç”¨è®°å½•æ—¶å‡ºç°é”™è¯¯");
         }
     }
 }
