@@ -19,7 +19,10 @@ namespace AppUsageTimerPro
                 .WriteTo.Sink(new LogSink())
                 .CreateLogger();
 
-            LogicManager.Instance.Initialize();
+            DispatcherUnhandledException += (sender, args) =>
+            {
+                Log.Error(args.Exception, $"出现一个未处理的异常\n详细信息见日志：{DataManager.Instance.LogSaveDir}");
+            };
         }
     }
 }

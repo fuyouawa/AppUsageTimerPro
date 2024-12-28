@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using EasyFramework;
 using EasyUiFramework;
 using MahApps.Metro.Controls;
@@ -10,7 +11,7 @@ namespace AppUsageTimerPro
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow, IEasyEventSubscriber
+    public partial class MainWindow : MetroWindow, IEasyEventDispatcher
     {
         private static MainWindow? _instance;
 
@@ -18,7 +19,7 @@ namespace AppUsageTimerPro
         {
             get
             {
-                DebugHelper.Assert(_instance != null);
+                Debug.Assert(_instance != null);
                 return _instance;
             }
         }
@@ -27,17 +28,18 @@ namespace AppUsageTimerPro
 
         public MainWindow()
         {
-            DebugHelper.Assert(_instance == null);
+            Debug.Assert(_instance == null);
             _instance = this;
             InitializeComponent();
-
+            
+            LogicManager.Instance.Initialize();
             this.RegisterEasyEventSubscriberInUiThread().UnRegisterWhenUnloaded(this);
         }
 
         [EasyEventHandler]
         void OnEvent(object sender, LogicTaskClosedEvent e)
         {
-            DebugHelper.Assert(_prepareClose);
+            Debug.Assert(_prepareClose);
             Close();
         }
 

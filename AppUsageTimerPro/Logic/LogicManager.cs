@@ -9,7 +9,7 @@ using Serilog;
 
 namespace AppUsageTimerPro;
 
-public class LogicManager : Singleton<LogicManager>, IEasyEventSubscriber
+public class LogicManager : Singleton<LogicManager>, IEasyEventDispatcher
 {
     public delegate void FixedUpdateDelegate(TimeSpan deltaTime);
 

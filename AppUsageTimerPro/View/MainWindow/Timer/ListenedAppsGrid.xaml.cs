@@ -59,10 +59,8 @@ namespace AppUsageTimerPro
         {
             var btn = (Button)sender;
             var row = btn.FindParent<DataGridRow>();
-            if (row != null)
-            {
-                ViewModel.Collection.RemoveAt(row.GetIndex());
-            }
+            Debug.Assert(row != null);
+            ViewModel.Collection.RemoveAt(row.GetIndex());
         }
     }
 }

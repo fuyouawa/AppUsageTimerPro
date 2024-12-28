@@ -56,18 +56,27 @@ namespace AppUsageTimerPro
         }
     }
 
+    public class TimerItemList : List<TimerItem>
+    {
+        public TimerItemList() {}
+        public TimerItemList(int capacity) : base(capacity) { }
+        public TimerItemList(IEnumerable<TimerItem> collection) : base(collection) {}
+    }
+
     public class TimerItem : ViewModelBase, ICloneable
     {
         public string Name { get; set; }
 
         public DayUsageTimeList DayUsageTimes { get; }
 
-        public bool Parsing { get; set; }
+        public bool Pausing { get; set; }
         public ParseDateRecordList ParseDateRecords { get; }
 
         public ListenedAppList ListenedApps { get; }
 
         public string Tag { get; set; }
+
+        public bool Forcing { get; set; }
         
         /// <summary>
         /// 除了今天以外的使用时间总和
@@ -94,15 +103,18 @@ namespace AppUsageTimerPro
         public string TotalUsageSpanDisplay => TotalUsageSpan.ToDisplayTimeString();
 
         public string TodayUsageSpanDisplay => TodayUsageTime.Span.ToDisplayTimeString();
-        
-        public TimerStatus Status { get; set; }
-        
-        public string StatusDisplay => Status switch
+
+        public string StatusDisplay
         {
-            TimerStatus.Running => "运行中",
-            TimerStatus.Pausing => "暂停中",
-            _ => "待命中",
-        };
+            get
+            {
+                if (Pausing)
+                    return "暂停中";
+                if (Forcing)
+                    return "使用中";
+                return "待命中";
+            }
+        }
 
         public TimerItem(string name, string tag, ListenedAppList listenedApps)
             : this(name, tag, listenedApps, new DayUsageTimeList(), new ParseDateRecordList())
@@ -113,7 +125,6 @@ namespace AppUsageTimerPro
         {
             Name = name;
             Tag = tag;
-            Status = TimerStatus.Standing;
             ListenedApps = listenedApps;
             DayUsageTimes = dayUsageTimes;
             ParseDateRecords = parseDateRecords;
@@ -130,34 +141,17 @@ namespace AppUsageTimerPro
             }
         }
 
-        public void SetParse(bool parse)
+        public void SetPause(bool pause)
         {
-            if (parse)
+            if (pause)
             {
-                if (Parsing) return;
-                Parsing = true;
+                if (Pausing) return;
+                Pausing = true;
                 ParseDateRecords.Add(DateTime.Now);
             }
             else
             {
-                Parsing = false;
-            }
-        }
-
-        public void ApplyChange(TimerChangedTypes changedTypes, object value, bool withEvent = false)
-        {
-            switch (changedTypes)
-            {
-                case TimerChangedTypes.SpanOfTodayUsageTime:
-                    TodayUsageTime.Span = (TimeSpan)value;
-                    if (withEvent)
-                    {
-                        OnPropertyChanged(nameof(TodayUsageSpanDisplay));
-                        OnPropertyChanged(nameof(TotalUsageSpanDisplay));
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(changedTypes), changedTypes, null);
+                Pausing = false;
             }
         }
 
@@ -165,8 +159,8 @@ namespace AppUsageTimerPro
         {
             return new TimerItem(Name, Tag, ListenedApps, DayUsageTimes, ParseDateRecords)
             {
-                Parsing = Parsing,
-                Status = Status
+                Pausing = Pausing,
+                Forcing = Forcing
             };
         }
     }
@@ -193,8 +187,8 @@ namespace AppUsageTimerPro
             writer.WritePropertyName("DayUsageTimes");
             serializer.Serialize(writer, value.DayUsageTimes);
 
-            writer.WritePropertyName("Parsing");
-            writer.WriteValue(value.Parsing);
+            writer.WritePropertyName("Pausing");
+            writer.WriteValue(value.Pausing);
 
             writer.WritePropertyName("ParseDateRecords");
             serializer.Serialize(writer, value.ParseDateRecords);
@@ -214,12 +208,12 @@ namespace AppUsageTimerPro
             var listenedApps = obj["ListenedApps"]!.ToObject<ListenedAppList>()!;
             var dayUsageTimes = obj["DayUsageTimes"]!.ToObject<DayUsageTimeList>()!;
 
-            var parsing = obj["Parsing"]!.ToObject<bool>();
+            var parsing = obj["Pausing"]!.ToObject<bool>();
             var parseDateRecords = obj["ParseDateRecords"]!.ToObject<ParseDateRecordList>()!;
 
             var res = new TimerItem(name, tag, listenedApps, dayUsageTimes, parseDateRecords)
             {
-                Parsing = parsing
+                Pausing = parsing
             };
             return res;
         }

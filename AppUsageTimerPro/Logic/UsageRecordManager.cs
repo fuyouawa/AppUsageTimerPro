@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ internal class AppIndexTable : List<string>, ICloneable
 
         if (!_appToIndex.TryGetValue(appName, out var index))
         {
-            DebugHelper.Assert(IndexOf(appName) == -1);
+            Debug.Assert(IndexOf(appName) == -1);
             Add(appName);
             index = Count - 1;
             _appToIndex[appName] = index;

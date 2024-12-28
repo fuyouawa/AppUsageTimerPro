@@ -12,7 +12,7 @@ namespace AppUsageTimerPro
     /// <summary>
     /// Interaction logic for TimerPage.xaml
     /// </summary>
-    public partial class TimerPage : Page, IEasyEventSubscriber
+    public partial class TimerPage : Page, IEasyEventDispatcher
     {
         private AddTimerDialog _addTimerDialog = new();
         private bool _loaded = false;
@@ -36,12 +36,20 @@ namespace AppUsageTimerPro
 
             Unloaded += (sender, args) =>
             {
-                Debug.WriteLine("23452");
                 _loaded = false;
             };
 
             this.RegisterEasyEventSubscriberInUiThread()
                 .UnRegisterWhenUnloaded(this);
+        }
+
+        [EasyEventHandler]
+        void OnEvent(object sender, TimerPauseChangedEvent e)
+        {
+            var timer = ViewModel.Collection.FirstOrDefault(t => t.Name == e.TimerName);
+            Debug.Assert(timer != null);
+            timer.Pausing = e.Pause;
+            timer.OnPropertyChanged(nameof(timer.StatusDisplay));
         }
 
         [EasyEventHandler]
@@ -67,17 +75,20 @@ namespace AppUsageTimerPro
                     break;
                 }
             }
-            DebugHelper.Assert(i < ViewModel.Collection.Count);
+            Debug.Assert(i < ViewModel.Collection.Count);
             ViewModel.Collection.RemoveAt(i);
         }
 
         [EasyEventHandler]
-        void OnEvent(object sender, TimerChangedEvent e)
+        void OnEvent(object sender, TimerTodayUsageTimeSpanChangedEvent e)
         {
             var timer = ViewModel.Collection.FirstOrDefault(t => t.Name == e.TimerName);
             if (timer == null)
                 return;
-            timer.ApplyChange(e.ChangedType, e.Value, true);
+
+            timer.TodayUsageTime.Span = e.Span;
+            timer.OnPropertyChanged(nameof(timer.TodayUsageSpanDisplay));
+            timer.OnPropertyChanged(nameof(timer.TotalUsageSpanDisplay));
         }
 
         private async void CloseAddTimerDialog(object sender, RoutedEventArgs e)

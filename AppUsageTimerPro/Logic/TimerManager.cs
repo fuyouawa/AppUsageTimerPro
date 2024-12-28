@@ -10,7 +10,7 @@ using Serilog;
 
 namespace AppUsageTimerPro.Logic;
 
-internal class TimerManager : Singleton<TimerManager>, IEasyEventSubscriber
+internal class TimerManager : Singleton<TimerManager>, IEasyEventDispatcher
 {
     public Dictionary<string, TimerItem> Timers { get; } = new();
     public bool Loaded { get; private set; }
@@ -27,9 +27,17 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventSubscriber
     }
 
     [EasyEventHandler]
+    void OnEvent(object sender, TimerPauseChangedEvent e)
+    {
+        var suc = Timers.TryGetValue(e.TimerName, out var timer);
+        Debug.Assert(suc && timer != null);
+        timer.Pausing = e.Pause;
+    }
+
+    [EasyEventHandler]
     async Task OnEvent(object sender, GetTimersReq req)
     {
-        void Call() => this.TriggerEasyEvent(new GetTimersRes(new List<TimerItem>(Timers.Values)));
+        void Call() => this.TriggerEasyEvent(new GetTimersRes(new TimerItemList(Timers.Values.CloneAll())));
 
         if (Loaded)
         {
@@ -48,14 +56,14 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventSubscriber
     {
         // 确保不会有重复计时器名称
         var suc = Timers.TryAdd(e.Timer.Name, e.Timer);
-        DebugHelper.Assert(suc);
+        Debug.Assert(suc);
     }
 
     [EasyEventHandler]
     void OnEvent(object sender, RemoveTimerEvent e)
     {
         var suc = Timers.Remove(e.TimerName);
-        DebugHelper.Assert(suc);
+        Debug.Assert(suc);
     }
 
     public void Update(TimeSpan deltaTime)
@@ -66,13 +74,15 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventSubscriber
 
         foreach (var timer in Timers.Values)
         {
+            if (timer.Pausing)
+                continue;
             // 此计时器的监听列表是否包含当前聚焦的进程
-            if (timer.ListenedApps.ContainAppName(proc.ProcessName))
+            timer.Forcing = timer.ListenedApps.ContainAppName(proc.ProcessName);
+            if (timer.Forcing)
             {
                 timer.TodayUsageTime.Span += deltaTime;
                 // 发送更改事件
-                this.TriggerEasyEvent(new TimerChangedEvent(timer.Name, TimerChangedTypes.SpanOfTodayUsageTime,
-                    timer.TodayUsageTime.Span));
+                this.TriggerEasyEvent(new TimerTodayUsageTimeSpanChangedEvent(timer.Name, timer.TodayUsageTime.Span));
             }
         }
     }
@@ -92,9 +102,9 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventSubscriber
             {
                 var json = await FileHelper.ReadAllTextWithHashAsync(file);
                 var val = JsonConvert.DeserializeObject<TimerItem>(json);
-                DebugHelper.Assert(val != null);
+                Debug.Assert(val != null);
                 var suc = Timers.TryAdd(val.Name, val);
-                DebugHelper.Assert(suc);
+                Debug.Assert(suc);
             }
 
             Loaded = true;
@@ -114,13 +124,13 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventSubscriber
 
     public async Task SaveAsync()
     {
-        var timers = new List<TimerItem>(Timers.Values);
+        var timers = new TimerItemList(Timers.Values.CloneAll());
         await SaveAsync(timers);
     }
 
     public void BeginSave(Action? savedCallback = null)
     {
-        var timers = new List<TimerItem>(Timers.Values);
+        var timers = new TimerItemList(Timers.Values.CloneAll());
         Task.Run(async () =>
         {
             await SaveAsync(timers);
@@ -128,7 +138,7 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventSubscriber
         });
     }
 
-    private static async Task SaveAsync(List<TimerItem> timers)
+    private static async Task SaveAsync(TimerItemList timers)
     {
         foreach (var timer in timers)
         {
