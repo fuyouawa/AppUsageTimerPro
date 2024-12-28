@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using EasyFramework;
 using Newtonsoft.Json;
@@ -50,14 +51,13 @@ public class SettingsConverter : JsonConverter<Settings>
 public class SettingsManager : Singleton<SettingsManager>
 {
     public Settings Settings { get; private set; } = new();
-    public JsonSerializerSettings JsonSerializerSettings { get; } = new();
 
     public readonly string SavePath;
 
     SettingsManager()
     {
-        JsonSerializerSettings.Converters.Add(new SettingsConverter());
-        JsonConvert.DefaultSettings += () => JsonSerializerSettings;
+        JsonConvert.DefaultSettings += () => new JsonSerializerSettings()
+            { Converters = new List<JsonConverter>() { new SettingsConverter() } };
 
         SavePath = Path.Combine(DataManager.Instance.ConfigSaveDir, "Settings.json");
 

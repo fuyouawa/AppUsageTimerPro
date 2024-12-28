@@ -17,13 +17,23 @@ internal struct UsageRecord
     public int AppIndex { get; set; }
 }
 
-internal class UsageRecordList : List<UsageRecord> {}
+internal class UsageRecordList : List<UsageRecord>
+{
+}
 
 internal class AppIndexTable : List<string>
 {
-    public AppIndexTable() {}
-    public AppIndexTable(int capacity) : base(capacity) { }
-    public AppIndexTable(IEnumerable<string> collection) : base(collection) {}
+    public AppIndexTable()
+    {
+    }
+
+    public AppIndexTable(int capacity) : base(capacity)
+    {
+    }
+
+    public AppIndexTable(IEnumerable<string> collection) : base(collection)
+    {
+    }
 
     private bool _hasChange;
 
@@ -54,6 +64,7 @@ internal class AppIndexTable : List<string>
             _appToIndex[appName] = index;
             _hasChange = true;
         }
+
         return index;
     }
 }
@@ -75,7 +86,8 @@ internal class UsageRecordListConverter : JsonConverter<UsageRecordList>
         writer.WriteEndObject();
     }
 
-    public override UsageRecordList? ReadJson(JsonReader reader, Type objectType, UsageRecordList? existingValue, bool hasExistingValue,
+    public override UsageRecordList? ReadJson(JsonReader reader, Type objectType, UsageRecordList? existingValue,
+        bool hasExistingValue,
         JsonSerializer serializer)
     {
         var obj = JObject.Load(reader);
@@ -86,8 +98,9 @@ internal class UsageRecordListConverter : JsonConverter<UsageRecordList>
         {
             var time = property.Name;
             var index = property.Value.ToObject<int>();
-            res.Add(new UsageRecord(){AppIndex = index, Span = TimeSpan.Parse(time)});
+            res.Add(new UsageRecord() { AppIndex = index, Span = TimeSpan.Parse(time) });
         }
+
         return res;
     }
 }
@@ -109,7 +122,8 @@ internal class AppIndexTableConverter : JsonConverter<AppIndexTable>
         writer.WriteEndObject();
     }
 
-    public override AppIndexTable? ReadJson(JsonReader reader, Type objectType, AppIndexTable? existingValue, bool hasExistingValue,
+    public override AppIndexTable? ReadJson(JsonReader reader, Type objectType, AppIndexTable? existingValue,
+        bool hasExistingValue,
         JsonSerializer serializer)
     {
         var obj = JObject.Load(reader);
@@ -122,6 +136,7 @@ internal class AppIndexTableConverter : JsonConverter<AppIndexTable>
             var index = property.Value.ToObject<int>();
             tmp.Add(index, appName);
         }
+
         return new AppIndexTable(tmp.OrderBy(kv => kv.Key).Select(kv => kv.Value).ToList());
     }
 }
@@ -131,15 +146,19 @@ internal class UsageRecordManager : Singleton<UsageRecordManager>
     private AppIndexTable _appIndexTable;
 
     private Dictionary<DateTime, UsageRecordList> _recordsSaveQueue = new();
-    private TimeSpan _autoSaveIntervalCounter;
-    private TimeSpan _autoSaveInterval;
 
     public readonly string AppIndexSavePath;
 
     UsageRecordManager()
     {
-        SettingsManager.Instance.JsonSerializerSettings.Converters.Add(new AppIndexTableConverter());
-        SettingsManager.Instance.JsonSerializerSettings.Converters.Add(new UsageRecordListConverter());
+        JsonConvert.DefaultSettings += () => new JsonSerializerSettings()
+        {
+            Converters = new List<JsonConverter>
+            {
+                new AppIndexTableConverter(),
+                new UsageRecordListConverter()
+            }
+        };
 
         AppIndexSavePath = Path.Combine(DataManager.Instance.UsageSaveDir, "AppIndex.json");
 
@@ -147,20 +166,10 @@ internal class UsageRecordManager : Singleton<UsageRecordManager>
 
         var json = FileHelper.ReadAllTextWithHash(AppIndexSavePath);
         _appIndexTable = JsonConvert.DeserializeObject<AppIndexTable>(json) ?? new AppIndexTable();
-
-        _autoSaveInterval = SettingsManager.Instance.Settings.AutoSaveInterval.Value;
-        SettingsManager.Instance.Settings.AutoSaveInterval.Register(span =>
-            LogicManager.Instance.Invoke(() => _autoSaveInterval = span));
     }
 
-    public void FixedUpdate(TimeSpan deltaTime)
+    public void Update(TimeSpan deltaTime)
     {
-        if (_autoSaveIntervalCounter >= _autoSaveInterval)
-        {
-            _autoSaveIntervalCounter = TimeSpan.Zero;
-            Task.Run(SaveAsync);
-        }
-        _autoSaveInterval += deltaTime;
     }
 
     public void AddRecord(DateTime time, string? appName)
@@ -171,7 +180,13 @@ internal class UsageRecordManager : Singleton<UsageRecordManager>
             list = new UsageRecordList();
             _recordsSaveQueue[time.Date] = list;
         }
-        list.Add(new UsageRecord() { AppIndex = i, Span = time.TimeOfDay});
+
+        list.Add(new UsageRecord() { AppIndex = i, Span = time.TimeOfDay });
+    }
+
+    public async Task AutoSave(TimeSpan interval)
+    {
+        await SaveAsync();
     }
 
     public async Task SaveAsync()
@@ -181,7 +196,8 @@ internal class UsageRecordManager : Singleton<UsageRecordManager>
             // 如果有新增app，保存app索引表
             if (_appIndexTable.CheckChange())
             {
-                await FileHelper.WriteAllTextWithHashAsync(AppIndexSavePath, JsonConvert.SerializeObject(_appIndexTable));
+                await FileHelper.WriteAllTextWithHashAsync(AppIndexSavePath,
+                    JsonConvert.SerializeObject(_appIndexTable));
             }
 
             if (_recordsSaveQueue.Count > 0)
@@ -191,7 +207,7 @@ internal class UsageRecordManager : Singleton<UsageRecordManager>
                     // 获取日期对应的记录文件
                     var path = Path.Combine(DataManager.Instance.UsageSaveDir,
                         records.Key.ToString("yyyy-MM-dd") + ".json");
-                    
+
                     FileHelper.CreateIfNotExist(path);
 
                     // 读取json并反序列化

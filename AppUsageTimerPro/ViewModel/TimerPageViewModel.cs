@@ -4,7 +4,7 @@ namespace AppUsageTimerPro
 {
     public class TimerPageViewModel : ViewModelBase
     {
-        private ObservableCollection<TimerItem> _collection;
+        private ObservableCollection<TimerItem> _collection = new();
 
         public ObservableCollection<TimerItem> Collection
         {

@@ -144,23 +144,21 @@ namespace AppUsageTimerPro
             }
         }
 
-        public string ApplyChange(TimerChangedTypes changedTypes, object value)
+        public void ApplyChange(TimerChangedTypes changedTypes, object value, bool withEvent = false)
         {
             switch (changedTypes)
             {
                 case TimerChangedTypes.SpanOfTodayUsageTime:
                     TodayUsageTime.Span = (TimeSpan)value;
-                    return nameof(TodayUsageSpanDisplay);
+                    if (withEvent)
+                    {
+                        OnPropertyChanged(nameof(TodayUsageSpanDisplay));
+                        OnPropertyChanged(nameof(TotalUsageSpanDisplay));
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(changedTypes), changedTypes, null);
             }
-        }
-
-        public string ApplyChangeWithEvent(TimerChangedTypes changedTypes, object value)
-        {
-            var name = ApplyChange(changedTypes, value);
-            OnPropertyChanged(name);
-            return name;
         }
 
         public object Clone()

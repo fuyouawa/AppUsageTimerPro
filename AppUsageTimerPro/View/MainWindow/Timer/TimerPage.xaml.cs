@@ -25,14 +25,14 @@ namespace AppUsageTimerPro
             _addTimerDialog.SuccessAddTimerEvent += AddTimerSuccessed;
 
             Loaded += (sender, args) =>
-                this.TriggerEasyEvent(new LoadedTimerUiEvent());
+                this.TriggerEasyEvent(new GetTimersReq());
 
             this.RegisterEasyEventSubscriberInUiThread()
                 .UnRegisterWhenUnloaded(this);
         }
 
         [EasyEventHandler]
-        void OnEvent(object sender, ReloadTimersEvent e)
+        void OnEvent(object sender, GetTimersRes e)
         {
             ViewModel.Collection = new ObservableCollection<TimerItem>(e.Timers);
         }
@@ -46,7 +46,16 @@ namespace AppUsageTimerPro
         [EasyEventHandler]
         void OnEvent(object sender, RemoveTimerEvent e)
         {
-            ViewModel.Collection.Remove(e.Timer);
+            int i = 0;
+            for (; i < ViewModel.Collection.Count; i++)
+            {
+                if (ViewModel.Collection[i].Name == e.TimerName)
+                {
+                    break;
+                }
+            }
+            DebugHelper.Assert(i < ViewModel.Collection.Count);
+            ViewModel.Collection.RemoveAt(i);
         }
 
         [EasyEventHandler]
@@ -55,7 +64,7 @@ namespace AppUsageTimerPro
             var timer = ViewModel.Collection.FirstOrDefault(t => t.Name == e.TimerName);
             if (timer == null)
                 return;
-            timer.ApplyChangeWithEvent(e.ChangedType, e.Value);
+            timer.ApplyChange(e.ChangedType, e.Value, true);
         }
 
         private async void CloseAddTimerDialog(object sender, RoutedEventArgs e)
@@ -101,7 +110,7 @@ namespace AppUsageTimerPro
                     return;
                 }
 
-                this.TriggerEasyEvent(new RemoveTimerEvent((TimerItem)selectedTimer.Clone()));
+                this.TriggerEasyEvent(new RemoveTimerEvent(selectedTimer.Name));
                 MainWindow.Instance.ShowPopupMessage("删除成功!", 2000);
                 SoundsManager.PlayTip();
             }

@@ -14,7 +14,7 @@ internal class ForceScanner : Singleton<ForceScanner>
     {
     }
 
-    public void FixedUpdate(TimeSpan deltaTime)
+    public void Update(TimeSpan deltaTime)
     {
         try
         {

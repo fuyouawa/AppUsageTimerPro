@@ -9,7 +9,10 @@ public enum TimerChangedTypes
 }
 
 public record AddTimerEvent(TimerItem Timer);
-public record RemoveTimerEvent(TimerItem Timer);
+public record RemoveTimerEvent(string TimerName);
 public record TimerChangedEvent(string TimerName, TimerChangedTypes ChangedType, object Value);
 
-public record ReloadTimersEvent(List<TimerItem> Timers);
+public record LoadedTimersEvent();
+
+public record GetTimersReq();
+public record GetTimersRes(List<TimerItem> Timers);
