@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using AppUsageTimerPro.Logic;
 using EasyFramework;
+using Newtonsoft.Json;
 
 namespace AppUsageTimerPro
 {
@@ -26,6 +29,18 @@ namespace AppUsageTimerPro
             Directory.CreateDirectory(UsageSaveDir);
             Directory.CreateDirectory(TimerSaveDir);
             Directory.CreateDirectory(ConfigSaveDir);
+
+            var settings = new JsonSerializerSettings()
+            {
+                Converters = new List<JsonConverter>()
+                {
+                    new AppIndexTableConverter(),
+                    new TimerItemConverter(),
+                    new UsageRecordListConverter(),
+                    new SettingsConverter()
+                }
+            };
+            JsonConvert.DefaultSettings += () => settings;
         }
     }
 }

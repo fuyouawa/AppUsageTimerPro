@@ -21,7 +21,7 @@ internal class UsageRecordList : List<UsageRecord>
 {
 }
 
-internal class AppIndexTable : List<string>
+internal class AppIndexTable : List<string>, ICloneable
 {
     public AppIndexTable()
     {
@@ -66,6 +66,14 @@ internal class AppIndexTable : List<string>
         }
 
         return index;
+    }
+    
+    public object Clone()
+    {
+        var ret = new AppIndexTable();
+        ret.AddRange(this);
+        ret._hasChange = _hasChange;
+        return ret;
     }
 }
 
@@ -151,15 +159,6 @@ internal class UsageRecordManager : Singleton<UsageRecordManager>
 
     UsageRecordManager()
     {
-        JsonConvert.DefaultSettings += () => new JsonSerializerSettings()
-        {
-            Converters = new List<JsonConverter>
-            {
-                new AppIndexTableConverter(),
-                new UsageRecordListConverter()
-            }
-        };
-
         AppIndexSavePath = Path.Combine(DataManager.Instance.UsageSaveDir, "AppIndex.json");
 
         FileHelper.CreateIfNotExist(AppIndexSavePath);
@@ -184,25 +183,52 @@ internal class UsageRecordManager : Singleton<UsageRecordManager>
         list.Add(new UsageRecord() { AppIndex = i, Span = time.TimeOfDay });
     }
 
-    public async Task AutoSave(TimeSpan interval)
+    public async Task CloseAsync()
     {
-        await SaveAsync();
+        this.UnRegisterEasyEventSubscriber();
+    }
+
+    public void AutoSave(TimeSpan interval)
+    {
+        BeginSave();
     }
 
     public async Task SaveAsync()
     {
+        var appIndexTable = (AppIndexTable)_appIndexTable.Clone();
+        var recordsSaveQueue = new Dictionary<DateTime, UsageRecordList>();
+        (recordsSaveQueue, _recordsSaveQueue) = (_recordsSaveQueue, recordsSaveQueue);
+        
+        await SaveAsync(appIndexTable, recordsSaveQueue);
+    }
+
+    public void BeginSave(Action? savedCallback = null)
+    {
+        var appIndexTable = (AppIndexTable)_appIndexTable.Clone();
+        var recordsSaveQueue = new Dictionary<DateTime, UsageRecordList>();
+        (recordsSaveQueue, _recordsSaveQueue) = (_recordsSaveQueue, recordsSaveQueue);
+
+        Task.Run(async () =>
+        {
+            await SaveAsync(appIndexTable, recordsSaveQueue);
+            savedCallback?.Invoke();
+        });
+    }
+
+    private static async Task SaveAsync(AppIndexTable appIndexTable, Dictionary<DateTime, UsageRecordList> recordsSaveQueue)
+    {
         try
         {
             // 如果有新增app，保存app索引表
-            if (_appIndexTable.CheckChange())
+            if (appIndexTable.CheckChange())
             {
-                await FileHelper.WriteAllTextWithHashAsync(AppIndexSavePath,
-                    JsonConvert.SerializeObject(_appIndexTable));
+                await FileHelper.WriteAllTextWithHashAsync(Instance.AppIndexSavePath,
+                    JsonConvert.SerializeObject(appIndexTable));
             }
 
-            if (_recordsSaveQueue.Count > 0)
+            if (recordsSaveQueue.Count > 0)
             {
-                foreach (var records in _recordsSaveQueue)
+                foreach (var records in recordsSaveQueue)
                 {
                     // 获取日期对应的记录文件
                     var path = Path.Combine(DataManager.Instance.UsageSaveDir,
@@ -218,8 +244,6 @@ internal class UsageRecordManager : Singleton<UsageRecordManager>
                     // 保存
                     await FileHelper.WriteAllTextWithHashAsync(path, JsonConvert.SerializeObject(res));
                 }
-
-                _recordsSaveQueue.Clear();
             }
         }
         catch (Exception e)

@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         <Grid ShowGridLines="True">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
@@ -41,7 +41,7 @@
                         BorderThickness="0"
                         Click="OnClickRemoveTimer"
                         ToolTip="删除计时器">
-                    <iconPacks:PackIconVaadinIcons Kind="Trash" Width="21" Height="21" />
+                    <iconPacks:PackIconModern Kind="Delete" Width="23" Height="23" />
                 </Button>
             </StackPanel>
 

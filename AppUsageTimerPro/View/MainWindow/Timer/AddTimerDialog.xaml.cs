@@ -24,18 +24,19 @@ namespace AppUsageTimerPro
         public AddTimerDialog()
         {
             InitializeComponent();
-        }
-
-        public event EventHandler<SuccessAddTimerEventArgs>? SuccessAddTimerEvent;
-
-        public void ClearText()
-        {
-            TxtTimerName.Text = string.Empty;
-            TxtTagTag.Text = string.Empty;
             ListenedAppsGrid.ErrorOccurEvent += (sender, err) =>
             {
                 ErrorOccur(err);
             };
+        }
+
+        public event EventHandler<SuccessAddTimerEventArgs>? SuccessAddTimerEvent;
+
+        public void Clear()
+        {
+            TxtTimerName.Text = string.Empty;
+            TxtTagTag.Text = string.Empty;
+            ListenedAppsGrid.Clear();
         }
 
         private void ErrorOccur(string err)

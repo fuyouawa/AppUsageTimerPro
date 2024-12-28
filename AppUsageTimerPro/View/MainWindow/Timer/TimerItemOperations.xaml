@@ -16,14 +16,6 @@
             <iconPacks:PackIconZondicons Kind="PauseOutline" Width="21" Height="21" />
         </Button>
         <Button Style="{DynamicResource MahApps.Styles.Button.Circle}"
-                Width="23"
-                Height="23"
-                Margin="0, 0, 3, 0"
-                BorderThickness="0"
-                ToolTip="终止计时器">
-            <iconPacks:PackIconPicolIcons Kind="BadgeStop" Width="21" Height="21" />
-        </Button>
-        <Button Style="{DynamicResource MahApps.Styles.Button.Circle}"
                 Width="21"
                 Height="21"
                 Margin="0, 0, 3, 0"
@@ -40,6 +32,15 @@
                 BorderThickness="0"
                 ToolTip="编辑信息">
             <iconPacks:PackIconMaterial Kind="NoteEditOutline" Width="21" Height="21" />
+        </Button>
+        <Button Style="{DynamicResource MahApps.Styles.Button.Circle}"
+                Width="21"
+                Height="21"
+                Margin="0, 0, 3, 0"
+                Padding="0"
+                BorderThickness="0"
+                ToolTip="删除计时器">
+            <iconPacks:PackIconModern Kind="Delete" Width="21" Height="21" />
         </Button>
     </StackPanel>
 </UserControl>

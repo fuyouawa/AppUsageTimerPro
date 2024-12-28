@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using MahApps.Metro.Controls.Dialogs;
 using System.Windows;
@@ -14,6 +15,7 @@ namespace AppUsageTimerPro
     public partial class TimerPage : Page, IEasyEventSubscriber
     {
         private AddTimerDialog _addTimerDialog = new();
+        private bool _loaded = false;
 
         public TimerPageViewModel ViewModel => (TimerPageViewModel)DataContext;
 
@@ -25,7 +27,18 @@ namespace AppUsageTimerPro
             _addTimerDialog.SuccessAddTimerEvent += AddTimerSuccessed;
 
             Loaded += (sender, args) =>
+            {
+                if (_loaded)
+                    return;
                 this.TriggerEasyEvent(new GetTimersReq());
+                _loaded = true;
+            };
+
+            Unloaded += (sender, args) =>
+            {
+                Debug.WriteLine("23452");
+                _loaded = false;
+            };
 
             this.RegisterEasyEventSubscriberInUiThread()
                 .UnRegisterWhenUnloaded(this);
@@ -82,7 +95,7 @@ namespace AppUsageTimerPro
 
         private async void OnClickAddTimer(object sender, RoutedEventArgs e)
         {
-            _addTimerDialog.ClearText();
+            _addTimerDialog.Clear();
             await MainWindow.Instance.ShowMetroDialogAsync(_addTimerDialog);
         }
 

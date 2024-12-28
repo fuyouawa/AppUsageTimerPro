@@ -16,3 +16,6 @@ public record LoadedTimersEvent();
 
 public record GetTimersReq();
 public record GetTimersRes(List<TimerItem> Timers);
+
+public record PrepareClosingEvent();
+public record LogicTaskClosedEvent();

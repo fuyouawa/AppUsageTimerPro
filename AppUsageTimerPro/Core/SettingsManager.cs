@@ -56,9 +56,6 @@ public class SettingsManager : Singleton<SettingsManager>
 
     SettingsManager()
     {
-        JsonConvert.DefaultSettings += () => new JsonSerializerSettings()
-            { Converters = new List<JsonConverter>() { new SettingsConverter() } };
-
         SavePath = Path.Combine(DataManager.Instance.ConfigSaveDir, "Settings.json");
 
         if (!File.Exists(SavePath))

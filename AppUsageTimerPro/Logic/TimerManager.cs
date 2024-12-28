@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EasyFramework;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace AppUsageTimerPro.Logic;
 
@@ -17,14 +18,6 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventSubscriber
 
     TimerManager()
     {
-        JsonConvert.DefaultSettings += () => new JsonSerializerSettings()
-        {
-            Converters = new List<JsonConverter>()
-            {
-                new TimerItemConverter()
-            }
-        };
-
         this.RegisterEasyEventSubscriber(triggerExtension: invoker => LogicManager.Instance.Invoke(invoker));
     }
 
@@ -84,31 +77,60 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventSubscriber
         }
     }
 
-    public async Task AutoSave(TimeSpan interval)
+    public void AutoSave(TimeSpan interval)
     {
-        await SaveAsync();
+        BeginSave();
     }
 
     public async Task LoadAsync()
     {
-        Timers.Clear();
-        Loaded = false;
-        foreach (var file in Directory.GetFiles(DataManager.Instance.TimerSaveDir))
+        try
         {
-            var json = await FileHelper.ReadAllTextWithHashAsync(file);
-            var val = JsonConvert.DeserializeObject<TimerItem>(json);
-            DebugHelper.Assert(val != null);
-            var suc = Timers.TryAdd(val.Name, val);
-            DebugHelper.Assert(suc);
+            Timers.Clear();
+            Loaded = false;
+            foreach (var file in Directory.GetFiles(DataManager.Instance.TimerSaveDir).Where(p => !p.EndsWith("hash")))
+            {
+                var json = await FileHelper.ReadAllTextWithHashAsync(file);
+                var val = JsonConvert.DeserializeObject<TimerItem>(json);
+                DebugHelper.Assert(val != null);
+                var suc = Timers.TryAdd(val.Name, val);
+                DebugHelper.Assert(suc);
+            }
+
+            Loaded = true;
+            LoadedTsc.TrySetResult();
+            this.TriggerEasyEvent(new LoadedTimersEvent());
         }
-        Loaded = true;
-        LoadedTsc.TrySetResult();
-        this.TriggerEasyEvent(new LoadedTimersEvent());
+        catch (Exception e)
+        {
+            Log.Fatal(e, "加载计时器失败");
+        }
+    }
+
+    public async Task CloseAsync()
+    {
+        this.UnRegisterEasyEventSubscriber();
     }
 
     public async Task SaveAsync()
     {
-        foreach (var timer in Timers.Values)
+        var timers = new List<TimerItem>(Timers.Values);
+        await SaveAsync(timers);
+    }
+
+    public void BeginSave(Action? savedCallback = null)
+    {
+        var timers = new List<TimerItem>(Timers.Values);
+        Task.Run(async () =>
+        {
+            await SaveAsync(timers);
+            savedCallback?.Invoke();
+        });
+    }
+
+    private static async Task SaveAsync(List<TimerItem> timers)
+    {
+        foreach (var timer in timers)
         {
             var path = Path.Combine(DataManager.Instance.TimerSaveDir, timer.Name + ".json");
             await FileHelper.WriteAllTextWithHashAsync(path, JsonConvert.SerializeObject(timer));

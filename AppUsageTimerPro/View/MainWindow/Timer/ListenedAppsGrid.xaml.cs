@@ -25,6 +25,11 @@ namespace AppUsageTimerPro
             InitializeComponent();
         }
 
+        public void Clear()
+        {
+            ViewModel.Collection.Clear();
+        }
+
         private void OnClickOpenAppName(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new()

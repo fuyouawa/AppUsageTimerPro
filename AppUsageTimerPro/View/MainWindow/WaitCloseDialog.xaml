@@ -1,0 +1,15 @@
+﻿<mah:CustomDialog x:Class="AppUsageTimerPro.WaitCloseDialog"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+       xmlns:local="clr-namespace:AppUsageTimerPro"
+       xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+       mc:Ignorable="d"
+       Title="保存数据中。。。。。。"
+       Height="100">
+    <Grid>
+        <Label FontSize="20">请不要强行关闭程序，否则可能会数据丢失</Label>
+    </Grid>
+</mah:CustomDialog>

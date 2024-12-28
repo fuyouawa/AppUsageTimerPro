@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using EasyFramework;
 using Serilog;
 
@@ -12,6 +13,11 @@ internal class ForceScanner : Singleton<ForceScanner>
 
     ForceScanner()
     {
+    }
+
+    public async Task CloseAsync()
+    {
+
     }
 
     public void Update(TimeSpan deltaTime)
