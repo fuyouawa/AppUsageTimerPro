@@ -12,23 +12,12 @@ namespace AppUsageTimerPro
             if (logEvent.Level != LogEventLevel.Error && logEvent.Level != LogEventLevel.Fatal)
                 return;
 
-            Application.Current.Dispatcher.BeginInvoke(() =>
+            if (logEvent.Level == LogEventLevel.Error)
             {
-                MessageBox.Show($"{logEvent.MessageTemplate.Text}\n详细消息见日志:{DataManager.Instance.LogSaveDir}", logEvent.Level.ToString(), MessageBoxButton.OK, logEvent.Level switch
+                Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    LogEventLevel.Verbose => MessageBoxImage.Information,
-                    LogEventLevel.Debug => MessageBoxImage.Information,
-                    LogEventLevel.Information => MessageBoxImage.Information,
-                    LogEventLevel.Warning => MessageBoxImage.Warning,
-                    LogEventLevel.Error => MessageBoxImage.Error,
-                    LogEventLevel.Fatal => MessageBoxImage.Error,
-                    _ => throw new ArgumentOutOfRangeException()
+                    MessageBox.Show($"{logEvent.MessageTemplate.Text}\n详细消息见日志:{DataManager.Instance.LogSaveDir}", logEvent.Level.ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
                 });
-            });
-
-            if (logEvent.Level == LogEventLevel.Fatal)
-            {
-                throw new Exception(logEvent.MessageTemplate.Text, logEvent.Exception);
             }
         }
     }

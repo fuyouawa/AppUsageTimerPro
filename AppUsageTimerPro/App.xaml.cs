@@ -21,7 +21,7 @@ namespace AppUsageTimerPro
 
             DispatcherUnhandledException += (sender, args) =>
             {
-                Log.Error(args.Exception, $"出现一个未处理的异常\n详细信息见日志：{DataManager.Instance.LogSaveDir}");
+                Log.Error(args.Exception, "出现一个未处理的异常");
             };
         }
     }

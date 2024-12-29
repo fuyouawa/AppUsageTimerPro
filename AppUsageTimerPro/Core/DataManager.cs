@@ -34,11 +34,12 @@ namespace AppUsageTimerPro
             {
                 Converters = new List<JsonConverter>()
                 {
-                    new AppIndexTableConverter(),
                     new TimerItemConverter(),
                     new UsageRecordListConverter(),
-                    new SettingsConverter()
-                }
+                    new SettingsConverter(),
+                    new ListenAppConverter()
+                },
+                Formatting = Formatting.Indented
             };
             JsonConvert.DefaultSettings += () => settings;
         }

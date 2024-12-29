@@ -205,11 +205,11 @@ namespace AppUsageTimerPro
             var name = obj["Name"]!.ToString();
             var tag = obj["Tag"]!.ToString();
 
-            var listenedApps = obj["ListenedApps"]!.ToObject<ListenedAppList>()!;
-            var dayUsageTimes = obj["DayUsageTimes"]!.ToObject<DayUsageTimeList>()!;
+            var listenedApps = obj["ListenedApps"]!.ToObject<ListenedAppList>(serializer)!;
+            var dayUsageTimes = obj["DayUsageTimes"]!.ToObject<DayUsageTimeList>(serializer)!;
 
             var parsing = obj["Pausing"]!.ToObject<bool>();
-            var parseDateRecords = obj["ParseDateRecords"]!.ToObject<ParseDateRecordList>()!;
+            var parseDateRecords = obj["ParseDateRecords"]!.ToObject<ParseDateRecordList>(serializer)!;
 
             var res = new TimerItem(name, tag, listenedApps, dayUsageTimes, parseDateRecords)
             {

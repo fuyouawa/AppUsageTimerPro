@@ -67,12 +67,12 @@ public class SettingsManager : Singleton<SettingsManager>
 
     public void Load()
     {
-        var json = FileHelper.ReadAllTextWithHash(SavePath);
+        var json = SafeFile.ReadAllText(SavePath);
         Settings = JsonConvert.DeserializeObject<Settings>(json) ?? new Settings();
     }
 
     public void Save()
     {
-        FileHelper.WriteAllTextWithHash(SavePath, JsonConvert.SerializeObject(Settings));
+        SafeFile.WriteAllText(SavePath, JsonConvert.SerializeObject(Settings));
     }
 }

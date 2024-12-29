@@ -8,6 +8,8 @@ public record RemoveTimerEvent(string TimerName);
 public record TimerTodayUsageTimeSpanChangedEvent(string TimerName, TimeSpan Span);
 public record TimerPauseChangedEvent(string TimerName, bool Pause);
 
+public record TimerForceChangedEvent(string TimerName, bool Forcing);
+
 public record LoadedTimersEvent();
 
 public record GetTimersReq();

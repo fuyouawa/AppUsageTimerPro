@@ -77,7 +77,12 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventDispatcher
             if (timer.Pausing)
                 continue;
             // 此计时器的监听列表是否包含当前聚焦的进程
-            timer.Forcing = timer.ListenedApps.ContainAppName(proc.ProcessName);
+            var forcing = timer.ListenedApps.ContainAppName(proc.ProcessName);
+            if (forcing != timer.Forcing)
+            {
+                timer.Forcing = forcing;
+                this.TriggerEasyEvent(new TimerForceChangedEvent(timer.Name, forcing));
+            }
             if (timer.Forcing)
             {
                 timer.TodayUsageTime.Span += deltaTime;
@@ -100,8 +105,7 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventDispatcher
             Loaded = false;
             foreach (var file in Directory.GetFiles(DataManager.Instance.TimerSaveDir).Where(p => !p.EndsWith("hash")))
             {
-                var json = await FileHelper.ReadAllTextWithHashAsync(file);
-                var val = JsonConvert.DeserializeObject<TimerItem>(json);
+                var val = await SafeFile.ReadAndDeserializeJsonAsync<TimerItem>(file);
                 Debug.Assert(val != null);
                 var suc = Timers.TryAdd(val.Name, val);
                 Debug.Assert(suc);
@@ -143,7 +147,7 @@ internal class TimerManager : Singleton<TimerManager>, IEasyEventDispatcher
         foreach (var timer in timers)
         {
             var path = Path.Combine(DataManager.Instance.TimerSaveDir, timer.Name + ".json");
-            await FileHelper.WriteAllTextWithHashAsync(path, JsonConvert.SerializeObject(timer));
+            await SafeFile.WriteAllTextAsync(path, JsonConvert.SerializeObject(timer));
         }
     }
 }
