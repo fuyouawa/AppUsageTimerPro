@@ -47,8 +47,19 @@ namespace AppUsageTimerPro
         void OnEvent(object sender, TimerPauseChangedEvent e)
         {
             var timer = ViewModel.Collection.FirstOrDefault(t => t.Name == e.TimerName);
-            Debug.Assert(timer != null);
+            if (timer == null)
+                return;
             timer.Pausing = e.Pause;
+            timer.OnPropertyChanged(nameof(timer.StatusDisplay));
+        }
+
+        [EasyEventHandler]
+        void OnEvent(object sender, TimerForceChangedEvent e)
+        {
+            var timer = ViewModel.Collection.FirstOrDefault(t => t.Name == e.TimerName);
+            if (timer == null)
+                return;
+            timer.Forcing = e.Forcing;
             timer.OnPropertyChanged(nameof(timer.StatusDisplay));
         }
 

@@ -7,16 +7,16 @@
                   xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                   mc:Ignorable="d"
-                  Height="325">
+                  Height="340">
     <StackPanel>
-        <Label Content="添加计时器" FontSize="18"/>
-        <Label Content="输入基本信息" FontSize="14"/>
+        <TextBlock Text="添加计时器" FontSize="20" FontWeight="Bold" Margin="5"/>
+        <TextBlock Text="输入基本信息" FontSize="16" Margin="5"/>
         <TextBox x:Name="TxtTimerName"
-                 mah:TextBoxHelper.ClearTextButton="True"
+                 FontSize="14"
                  mah:TextBoxHelper.Watermark="计时器名称......(1-16字)" />
         <TextBox x:Name="TxtTagTag"
-                 mah:TextBoxHelper.ClearTextButton="True"
-                 mah:TextBoxHelper.Watermark="标签......(1-16字)" Margin="0, 5, 0, 0"/>
+                 FontSize="14"
+                 mah:TextBoxHelper.Watermark="标签......(1-16字)" Margin="0, 5, 0, 5"/>
         <local:ListenedAppsGrid x:Name="ListenedAppsGrid" MaxHeight="160" Height="160"></local:ListenedAppsGrid>
         <StackPanel Orientation="Horizontal"
                     Margin="0, 5, 0, 0"

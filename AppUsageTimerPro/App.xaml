@@ -5,6 +5,21 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MahApps.Styles.TextBlock}">
+                <Setter Property="FontFamily" Value="Microsoft YaHei UI" />
+            </Style>
+            <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MahApps.Styles.CheckBox}">
+                <Setter Property="FontFamily" Value="Microsoft YaHei UI" />
+            </Style>
+            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MahApps.Styles.ComboBox}">
+                <Setter Property="FontFamily" Value="Microsoft YaHei UI" />
+            </Style>
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+                <Setter Property="FontFamily" Value="Microsoft YaHei UI" />
+            </Style>
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button}">
+                <Setter Property="FontFamily" Value="Microsoft YaHei UI" />
+            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />

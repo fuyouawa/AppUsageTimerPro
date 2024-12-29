@@ -75,15 +75,44 @@
                   BorderThickness="1"
                   SelectionMode="Single"
                   SelectedItem="{Binding SelectedItem}"
-                  SelectedIndex="{Binding SelectedIndex}">
+                  SelectedIndex="{Binding SelectedIndex}"
+                  FontSize="14">
             <DataGrid.Columns>
                 <local:DataGridIndexRowColumn/>
-                <DataGridTextColumn Header="计时器名称" Binding="{Binding Path=Name}" Width="25*" IsReadOnly="True" CanUserSort="False"/>
-                <DataGridTextColumn Header="总使用时间" Binding="{Binding Path=TotalUsageSpanDisplay}" Width="20*" IsReadOnly="True" />
-                <DataGridTextColumn Header="今日使用时间" Binding="{Binding Path=TodayUsageSpanDisplay}" Width="20*" IsReadOnly="True" />
-                <DataGridTextColumn Header="标签" Binding="{Binding Path=Tag}" Width="10*" IsReadOnly="True" CanUserSort="False"/>
-                <DataGridTextColumn Header="状态" Binding="{Binding Path=StatusDisplay}" Width="10*" IsReadOnly="True" CanUserSort="False"/>
-                <DataGridTemplateColumn Header="操作" Width="15*" IsReadOnly="True" >
+                <DataGridTextColumn Binding="{Binding Path=Name}" Width="25*" IsReadOnly="True" CanUserSort="False">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="计时器名称" FontSize="14"></TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding Path=TotalUsageSpanDisplay}" Width="20*" IsReadOnly="True" >
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="总使用时间" FontSize="14"></TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding Path=TodayUsageSpanDisplay}" Width="20*" IsReadOnly="True" >
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="今日使用时间" FontSize="14"></TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding Path=Tag}" Width="10*" IsReadOnly="True" CanUserSort="False">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="标签" FontSize="14"></TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding Path=StatusDisplay}" Width="10*" IsReadOnly="True" CanUserSort="False">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="状态" FontSize="14"></TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <DataGridTemplateColumn Width="15*" IsReadOnly="True" >
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Text="操作" FontSize="14"></TextBlock>
+                    </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <local:TimerItemOperations/>

@@ -8,9 +8,27 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingsPage">
 
-    <Grid>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40" Foreground="Gray">
-            TODO
-        </TextBlock>
-    </Grid>
+    <TabControl Style="{DynamicResource MahApps.Styles.TabControl.AnimatedSingleRow}">
+        <TabItem Header="常规">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                <local:TitleBlock Title="启动设置"/>
+                <CheckBox Content="开机自启" Margin="5" FontSize="16"/>
+                <CheckBox Content="以管理员身份运行" Margin="5" FontSize="16"/>
+                <local:TitleBlock Title="外观设置" FontSize="16"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15*"></ColumnDefinition>
+                        <ColumnDefinition Width="25*"></ColumnDefinition>
+                        <ColumnDefinition Width="60*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="主题" VerticalAlignment="Center" FontSize="16"/>
+                    <ComboBox Grid.Column="1" SelectedIndex="0" FontSize="16">
+                        <ComboBoxItem>浅色</ComboBoxItem>
+                        <ComboBoxItem>深色</ComboBoxItem>
+                    </ComboBox>
+                </Grid>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="存储"></TabItem>
+    </TabControl>
 </Page>

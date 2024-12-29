@@ -24,7 +24,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBox x:Name="TxtListenAppName"
-                     mah:TextBoxHelper.ClearTextButton="True"
+                     FontSize="14"
                      mah:TextBoxHelper.Watermark="要监听的应用程序......"
                      Grid.Column="0" />
             <Button HorizontalAlignment="Right"
@@ -56,7 +56,11 @@
                   RowHeight="25">
             <DataGrid.Columns>
                 <local:DataGridIndexRowColumn/>
-                <DataGridTextColumn Header="监听应用列表" Binding="{Binding Path=Name}" IsReadOnly="True" Width="*" />
+                <DataGridTextColumn Binding="{Binding Path=Name}" IsReadOnly="True" Width="*" >
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="监听应用列表" FontSize="14"></TextBlock>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
                 <DataGridTemplateColumn Width="25" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
